@@ -1,0 +1,30 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Name": "C.D.C. MOLINO DE SANTO DOMINGO", "Direc": "Sta Lucia S/N Esq San FranciscoMolino Sto Domingo1130, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.208372914122648, 19.394977591938499, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C.D.C. FRANCISCO VILLA", "Direc": "Maturines Lt 22Francisco Villa1280, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.204436504798508, 19.384896481764219, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C.D.C. ESTADO DE HIDALGO", "Direc": "And Columbus 3Estado de Hidalgo1520, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.242786619005329, 19.36559999024637, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C.D.C. TEZONTLA", "Direc": "Cl. SILVESTRE MELGAREJO, S/NACUILOTLA1539, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.243393, 19.360899, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Agüilas Tarango", "Direc": "Andador 6 Lt 1 Mz 9 3 Parque Ampl AguilasNA1750, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.219602534472386, 19.353085686677201, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Colinas del Sur", "Direc": "Calz. DE LOS CORCELES, S/NCOLINA DEL SUR1430, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.227839, 19.365572, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. El Cuernito", "Direc": "Cl. URANO, S/NREACOMODO EL CUERNITO1289, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.208584854162197, 19.381918513255009, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Golondrinas", "Direc": "Avd. LOMAS DE CAPULA, S/NGOLONDRINAS 1RA SECCION1270, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.210222, 19.38041, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Jalalpa Barrio", "Direc": "Diaz Ordaz Esquina Nicolas BravoJalalpa1296, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.229779303205973, 19.379118541798022, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Jalalpa el Grande", "Direc": "Avd. JALALPA NORTE, S/NJALALPA EL GRANDE1377, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.239717, 19.371353, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. La Cebada", "Direc": "Priv Lazaro Cardenas 15Ampl Cebada1259, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.233789008615105, 19.37951107305965, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. La Conchita", "Direc": "Cl. 1 DE NOVIEMBRE, S/NLA CONCHITA1109, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.207283890906695, 19.392367070892639, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Lomas de Becerra", "Direc": "Cl. CUERNAVACA, MZ-15 LT-26LOMAS DE BECERRA1279, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.216006, 19.385636, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Molino de Rosas", "Direc": "VULCANO S/NMOLINO DE ROSAS1470, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.200179, 19.37067, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Olivar del Conde", "Direc": "Av Hidalgo Num. 7Olivar del Conde1408, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.213816, 19.372821, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Piru Desarrollo Urbano", "Direc": "Cl. CEDROS, S/NEL TEJOCOTE1270, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.218173849372633, 19.381355993806849, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Rosario Ibarra de Piedra", "Direc": "CALLE 6 L2REACOMODO LOMAS PUERTA GRANDE1630, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.230850787372447, 19.355557030789569, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Santa Lucia", "Direc": "Cl. CORREGIDORA, S/NPUEBLO SANTA LUCIA1500, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.25474, 19.358441, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Tizapan", "Direc": "Cl. M OCAMPO, 18PUEBLO TIZAPAN1090, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.201881, 19.336198, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Zenón Delgado", "Direc": "Cmo. REAL A TOLUCA, S/NZENON DELGADO1220, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.215963989606564, 19.388190796566938, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. 13 de Julio", "Direc": "1 CDA GARDENIA, S/NPUERTA GRANDE1630, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.234146550342089, 19.356474625935231, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Tetelpan", "Direc": "MAGNOLIA 242a del Moral1700, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.226061110199652, 19.341482944036379, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "C. D. C. Presidentes Groover", "Direc": "Thomas Wilson Mz. 16 Lt. 161 Ampl. Presidentes1299, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.224740377076358, 19.37816688608299, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "AGUILAS PILARES", "Direc": "Cl. MINAS, 134-2LAS AGUILAS1710, Álvaro Obregón" }, "geometry": { "type": "Point", "coordinates": [ -99.206607412747204, 19.354357073199129, 0.0 ] } }
+]
+}

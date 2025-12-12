@@ -52,6 +52,13 @@
   </head>
 
   <body>
+    <!-- Mensaje de rotación para dispositivos móviles -->
+    <div id="rotation-message">
+        <div class="rotation-icon">📱</div>
+        <h2>Gira tu dispositivo</h2>
+        <p>Para una mejor experiencia, por favor gira tu dispositivo a modo horizontal (landscape)</p>
+    </div>
+
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
@@ -120,10 +127,6 @@
     <div class="main-container">
       <!-- Contenedor lateral (panel + botón) -->
       <div class="sidebar-container" id="sidebarContainer">
-        <!-- Botón (estilo "hamburger") anclado al panel -->
-        <button class="toggle-btn" id="toggleBtn">
-          <span class="hamburger"></span>
-        </button>
         <!-- Panel de información -->
         <div class="informacion" id="sidebar">
           <div class="contenido-informacion">
@@ -164,6 +167,12 @@
           </div>
         </div>
       </div>
+      
+      <!-- Botón toggle fuera del sidebar-container -->
+      <button class="toggle-btn" id="toggleBtn">
+        <span class="hamburger"></span>
+      </button>
+      
       <!-- Mapa  -->
       <div class="map-container">
         <div id="map"></div>

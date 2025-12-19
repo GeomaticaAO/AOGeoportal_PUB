@@ -20,6 +20,101 @@ document.addEventListener("DOMContentLoaded", function () {
     listaCapas.className = "lista-capas";
     controlCapasContainer.appendChild(listaCapas);
 
+    // 🏗️ Crear grupo principal para Infraestructuras
+    const grupoInfraestructura = document.createElement("li");
+    grupoInfraestructura.style.marginBottom = "15px";
+    grupoInfraestructura.style.listStyle = "none";
+    grupoInfraestructura.style.display = "block";
+    grupoInfraestructura.style.width = "100%";
+    
+    // Contenedor para la cabecera del grupo (flecha + checkbox + label)
+    const headerGrupo = document.createElement("div");
+    headerGrupo.style.display = "flex";
+    headerGrupo.style.alignItems = "center";
+    headerGrupo.style.marginBottom = "8px";
+    headerGrupo.style.width = "100%";
+    headerGrupo.style.flexWrap = "nowrap";
+    
+    // Icono desplegable (flecha)
+    const iconoToggle = document.createElement("span");
+    iconoToggle.innerHTML = "▶"; // Flecha derecha
+    iconoToggle.style.cursor = "pointer";
+    iconoToggle.style.marginRight = "8px";
+    iconoToggle.style.fontSize = "12px";
+    iconoToggle.style.transition = "transform 0.3s ease";
+    iconoToggle.style.display = "inline-block";
+    iconoToggle.style.width = "15px";
+    iconoToggle.style.flexShrink = "0";
+    
+    // Checkbox principal del grupo
+    const checkboxGrupo = document.createElement("input");
+    checkboxGrupo.type = "checkbox";
+    checkboxGrupo.id = "checkboxInfraestructuras";
+    checkboxGrupo.style.marginRight = "8px";
+    checkboxGrupo.style.flexShrink = "0";
+    
+    const labelGrupo = document.createElement("label");
+    labelGrupo.htmlFor = "checkboxInfraestructuras";
+    labelGrupo.style.fontWeight = "bold";
+    labelGrupo.style.cursor = "pointer";
+    labelGrupo.style.fontSize = "14px";
+    labelGrupo.style.flex = "1";
+    labelGrupo.textContent = "Infraestructuras Álvaro Obregón";
+    
+    // Contenedor de capas hijas (sublista)
+    const listaCapasInfraestructura = document.createElement("ul");
+    listaCapasInfraestructura.className = "lista-capas-infraestructura";
+    listaCapasInfraestructura.style.marginLeft = "25px";
+    listaCapasInfraestructura.style.marginTop = "5px";
+    listaCapasInfraestructura.style.display = "none"; // Inicialmente oculto
+    listaCapasInfraestructura.style.listStyle = "none";
+    listaCapasInfraestructura.style.paddingLeft = "0";
+    listaCapasInfraestructura.style.width = "100%";
+    
+    // Variable para controlar el estado desplegado
+    let isExpanded = false;
+    
+    // Función para toggle del grupo (expandir/colapsar)
+    iconoToggle.addEventListener("click", function() {
+        isExpanded = !isExpanded;
+        listaCapasInfraestructura.style.display = isExpanded ? "block" : "none";
+        iconoToggle.style.transform = isExpanded ? "rotate(90deg)" : "rotate(0deg)";
+    });
+    
+    // También permitir expandir al hacer clic en el label
+    labelGrupo.addEventListener("click", function(e) {
+        if (e.target === labelGrupo) {
+            iconoToggle.click();
+        }
+    });
+    
+    // Ensamblar la cabecera
+    headerGrupo.appendChild(iconoToggle);
+    headerGrupo.appendChild(checkboxGrupo);
+    headerGrupo.appendChild(labelGrupo);
+    
+    grupoInfraestructura.appendChild(headerGrupo);
+    grupoInfraestructura.appendChild(listaCapasInfraestructura);
+    listaCapas.appendChild(grupoInfraestructura);
+    
+    // Array para almacenar todos los checkboxes de las capas de infraestructura
+    const checkboxesInfraestructura = [];
+    
+    // Función para manejar el checkbox principal
+    checkboxGrupo.addEventListener("change", function() {
+        // Si se activa el checkbox, expandir automáticamente
+        if (this.checked && !isExpanded) {
+            iconoToggle.click();
+        }
+        
+        // Activar/desactivar todas las capas hijas
+        checkboxesInfraestructura.forEach(cb => {
+            if (cb.checked !== this.checked) {
+                cb.click();
+            }
+        });
+    });
+
 
 
     // Íconos: Centros de Desarrollo Comunitario
@@ -142,7 +237,9 @@ fetch(urlCSV)
 
                 itemCapa.appendChild(checkbox);
                 itemCapa.appendChild(label);
-                listaCapas.appendChild(itemCapa);
+                listaCapasInfraestructura.appendChild(itemCapa);
+                checkboxesInfraestructura.push(checkbox);
+                checkboxesInfraestructura.push(checkbox);
             }
         });
     });
@@ -269,7 +366,8 @@ fetch(urlCSVModulos)
 
         itemCapa.appendChild(checkbox);
         itemCapa.appendChild(label);
-        listaCapas.appendChild(itemCapa);
+        listaCapasInfraestructura.appendChild(itemCapa);
+        checkboxesInfraestructura.push(checkbox);
       }
     });
   })
@@ -398,7 +496,8 @@ fetch(urlCSVCACI)
 
         itemCapa.appendChild(checkbox);
         itemCapa.appendChild(label);
-        listaCapas.appendChild(itemCapa);
+        listaCapasInfraestructura.appendChild(itemCapa);
+        checkboxesInfraestructura.push(checkbox);
       }
     });
   })
@@ -523,7 +622,8 @@ fetch(urlCSVCC)
 
         itemCapa.appendChild(checkbox);
         itemCapa.appendChild(label);
-        listaCapas.appendChild(itemCapa);
+        listaCapasInfraestructura.appendChild(itemCapa);
+        checkboxesInfraestructura.push(checkbox);
       }
     });
   })
@@ -647,7 +747,8 @@ fetch(urlCSV_CI)
 
         itemCapa.appendChild(checkbox);
         itemCapa.appendChild(label);
-        listaCapas.appendChild(itemCapa);
+        listaCapasInfraestructura.appendChild(itemCapa);
+        checkboxesInfraestructura.push(checkbox);
       }
     });
   })
@@ -771,7 +872,8 @@ fetch(urlCSV_CAM)
 
         itemCapa.appendChild(checkbox);
         itemCapa.appendChild(label);
-        listaCapas.appendChild(itemCapa);
+        listaCapasInfraestructura.appendChild(itemCapa);
+        checkboxesInfraestructura.push(checkbox);
       }
     });
   })
@@ -894,9 +996,628 @@ fetch(urlCSV_CAO)
 
         itemCapa.appendChild(checkbox);
         itemCapa.appendChild(label);
-        listaCapas.appendChild(itemCapa);
+        listaCapasInfraestructura.appendChild(itemCapa);
+        checkboxesInfraestructura.push(checkbox);
       }
     });
   })
   .catch(error => console.error("Error al cargar Centros de Artes y Oficios:", error));
+
+// ============================================================================
+// 🏢 GRUPO: EQUIPAMIENTOS URBANOS
+// ============================================================================
+
+// 🏗️ Crear grupo principal para Equipamientos Urbanos
+const grupoEquipamientos = document.createElement("li");
+grupoEquipamientos.style.marginBottom = "15px";
+grupoEquipamientos.style.listStyle = "none";
+grupoEquipamientos.style.display = "block";
+grupoEquipamientos.style.width = "100%";
+
+// Contenedor para la cabecera del grupo (flecha + checkbox + label)
+const headerEquipamientos = document.createElement("div");
+headerEquipamientos.style.display = "flex";
+headerEquipamientos.style.alignItems = "center";
+headerEquipamientos.style.marginBottom = "8px";
+headerEquipamientos.style.width = "100%";
+headerEquipamientos.style.flexWrap = "nowrap";
+
+// Icono desplegable (flecha)
+const iconoToggleEquip = document.createElement("span");
+iconoToggleEquip.innerHTML = "▶";
+iconoToggleEquip.style.cursor = "pointer";
+iconoToggleEquip.style.marginRight = "8px";
+iconoToggleEquip.style.fontSize = "12px";
+iconoToggleEquip.style.transition = "transform 0.3s ease";
+iconoToggleEquip.style.display = "inline-block";
+iconoToggleEquip.style.width = "15px";
+iconoToggleEquip.style.flexShrink = "0";
+
+// Checkbox principal del grupo
+const checkboxEquipamientos = document.createElement("input");
+checkboxEquipamientos.type = "checkbox";
+checkboxEquipamientos.id = "checkboxEquipamientos";
+checkboxEquipamientos.style.marginRight = "8px";
+checkboxEquipamientos.style.flexShrink = "0";
+
+const labelEquipamientos = document.createElement("label");
+labelEquipamientos.htmlFor = "checkboxEquipamientos";
+labelEquipamientos.style.fontWeight = "bold";
+labelEquipamientos.style.cursor = "pointer";
+labelEquipamientos.style.fontSize = "14px";
+labelEquipamientos.style.flex = "1";
+labelEquipamientos.textContent = "Equipamientos Urbanos";
+
+// Contenedor de capas hijas (sublista)
+const listaCapasEquipamientos = document.createElement("ul");
+listaCapasEquipamientos.className = "lista-capas-equipamientos";
+listaCapasEquipamientos.style.marginLeft = "25px";
+listaCapasEquipamientos.style.marginTop = "5px";
+listaCapasEquipamientos.style.display = "none";
+listaCapasEquipamientos.style.listStyle = "none";
+listaCapasEquipamientos.style.paddingLeft = "0";
+listaCapasEquipamientos.style.width = "100%";
+
+// Variable para controlar el estado desplegado
+let isExpandedEquip = false;
+
+// Función para toggle del grupo
+iconoToggleEquip.addEventListener("click", function() {
+    isExpandedEquip = !isExpandedEquip;
+    listaCapasEquipamientos.style.display = isExpandedEquip ? "block" : "none";
+    iconoToggleEquip.style.transform = isExpandedEquip ? "rotate(90deg)" : "rotate(0deg)";
+});
+
+labelEquipamientos.addEventListener("click", function(e) {
+    if (e.target === labelEquipamientos) {
+        iconoToggleEquip.click();
+    }
+});
+
+// Ensamblar la cabecera
+headerEquipamientos.appendChild(iconoToggleEquip);
+headerEquipamientos.appendChild(checkboxEquipamientos);
+headerEquipamientos.appendChild(labelEquipamientos);
+
+grupoEquipamientos.appendChild(headerEquipamientos);
+grupoEquipamientos.appendChild(listaCapasEquipamientos);
+listaCapas.appendChild(grupoEquipamientos);
+
+// Array para almacenar checkboxes de equipamientos
+const checkboxesEquipamientos = [];
+
+// Función para manejar el checkbox principal
+checkboxEquipamientos.addEventListener("change", function() {
+    if (this.checked && !isExpandedEquip) {
+        iconoToggleEquip.click();
+    }
+    checkboxesEquipamientos.forEach(cb => {
+        if (cb.checked !== this.checked) {
+            cb.click();
+        }
+    });
+});
+
+// ============================================================================
+// 🏥 CAPA: HOSPITALES
+// ============================================================================
+fetch("archivos/vectores/hospitales.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoHospital = L.divIcon({
+      html: '<div style="font-size: 28px; line-height: 1;">🏥</div>',
+      className: 'emoji-icon',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -14]
+    });
+
+    const grupoHospitales = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.nom_estab || 'Hospital'}</b><br>`;
+      if (props.raz_social) popup += `<b>Razón Social:</b> ${props.raz_social}<br>`;
+      if (props.nom_vial) popup += `<b>Vialidad:</b> ${props.nom_vial}<br>`;
+      if (props.cod_postal) popup += `<b>C.P.:</b> ${props.cod_postal}<br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoHospital,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoHospitales.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.nom_estab || 'Hospital',
+          capa: "Hospitales",
+          marker: marker
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxHospitales";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoHospitales.addTo(map);
+      } else {
+        map.removeLayer(grupoHospitales);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxHospitales";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🏥</span>
+      Hospitales
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar Hospitales:", error));
+
+// ============================================================================
+// 🛒 CAPA: MERCADOS
+// ============================================================================
+fetch("archivos/vectores/mercados.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoMercado = L.divIcon({
+      html: '<div style="font-size: 28px; line-height: 1;">🛒</div>',
+      className: 'emoji-icon',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -14]
+    });
+
+    const grupoMercados = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.Name || 'Mercado'}</b><br>`;
+      if (props.descriptio) popup += `${props.descriptio}<br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoMercado,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoMercados.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.Name || 'Mercado',
+          capa: "Mercados",
+          marker: marker
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxMercados";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoMercados.addTo(map);
+      } else {
+        map.removeLayer(grupoMercados);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxMercados";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🛒</span>
+      Mercados
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar Mercados:", error));
+
+// ============================================================================
+// 🌳 CAPA: PARQUES
+// ============================================================================
+fetch("archivos/vectores/parques.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoParque = L.divIcon({
+      html: '<div style="font-size: 28px; line-height: 1;">🌳</div>',
+      className: 'emoji-icon',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -14]
+    });
+
+    const grupoParques = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.Name || 'Parque'}</b><br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoParque,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoParques.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.Name || 'Parque',
+          capa: "Parques",
+          marker: marker
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxParques";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoParques.addTo(map);
+      } else {
+        map.removeLayer(grupoParques);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxParques";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🌳</span>
+      Parques
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar Parques:", error));
+
+// ============================================================================
+// 🏛️ CAPA: PILARES
+// ============================================================================
+fetch("archivos/vectores/pilares.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoPilar = L.divIcon({
+      html: '<div style="font-size: 28px; line-height: 1;">🏛️</div>',
+      className: 'emoji-icon',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -14]
+    });
+
+    const grupoPilares = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.Name || 'PILAR'}</b><br>`;
+      if (props.descriptio) popup += `<b>Dirección:</b> ${props.descriptio}<br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoPilar,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoPilares.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.Name || 'PILAR',
+          capa: "PILARES",
+          marker: marker
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxPilares";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoPilares.addTo(map);
+      } else {
+        map.removeLayer(grupoPilares);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxPilares";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🏛️</span>
+      PILARES
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar PILARES:", error));
+
+// ============================================================================
+// 👶 CAPA: PREESCOLAR
+// ============================================================================
+fetch("archivos/vectores/preescolar.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoPreescolar = L.divIcon({
+      html: '<div style="font-size: 26px; line-height: 1;">👶</div>',
+      className: 'emoji-icon',
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      popupAnchor: [0, -13]
+    });
+
+    const grupoPreescolar = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.nombre || 'Preescolar'}</b><br>`;
+      if (props.domicilio) popup += `<b>Domicilio:</b> ${props.domicilio}<br>`;
+      if (props.colonia) popup += `<b>Colonia:</b> ${props.colonia}<br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoPreescolar,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoPreescolar.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.nombre || 'Preescolar',
+          capa: "Preescolar",
+          marker: marker
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxPreescolar";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoPreescolar.addTo(map);
+      } else {
+        map.removeLayer(grupoPreescolar);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxPreescolar";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">👶</span>
+      Preescolar
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar Preescolar:", error));
+
+// ============================================================================
+// 📚 CAPA: PRIMARIAS
+// ============================================================================
+fetch("archivos/vectores/primarias.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoPrimaria = L.divIcon({
+      html: '<div style="font-size: 26px; line-height: 1;">📚</div>',
+      className: 'emoji-icon',
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      popupAnchor: [0, -13]
+    });
+
+    const grupoPrimarias = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.nombre || 'Primaria'}</b><br>`;
+      if (props.domicilio) popup += `<b>Domicilio:</b> ${props.domicilio}<br>`;
+      if (props.colonia) popup += `<b>Colonia:</b> ${props.colonia}<br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoPrimaria,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoPrimarias.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.nombre || 'Primaria',
+          capa: "Primarias",
+          marker: marker
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxPrimarias";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoPrimarias.addTo(map);
+      } else {
+        map.removeLayer(grupoPrimarias);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxPrimarias";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">📚</span>
+      Primarias
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar Primarias:", error));
+
+// ============================================================================
+// 🎓 CAPA: SECUNDARIAS
+// ============================================================================
+fetch("archivos/vectores/secundarias.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoSecundaria = L.divIcon({
+      html: '<div style="font-size: 26px; line-height: 1;">🎓</div>',
+      className: 'emoji-icon',
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      popupAnchor: [0, -13]
+    });
+
+    const grupoSecundarias = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.nombre || 'Secundaria'}</b><br>`;
+      if (props.domicilio) popup += `<b>Domicilio:</b> ${props.domicilio}<br>`;
+      if (props.colonia) popup += `<b>Colonia:</b> ${props.colonia}<br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoSecundaria,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoSecundarias.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.nombre || 'Secundaria',
+          capa: "Secundarias",
+          marker: marker
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxSecundarias";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoSecundarias.addTo(map);
+      } else {
+        map.removeLayer(grupoSecundarias);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxSecundarias";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🎓</span>
+      Secundarias
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar Secundarias:", error));
+
 });

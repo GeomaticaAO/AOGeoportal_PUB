@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"name": "hospitales",
+"features": [
+{ "type": "Feature", "properties": { "nom_estab": "UMAE HOSP GINECO OBSTETRICIA 4 LUIS CASTELAZO AYALA", "raz_social": "EL GOBIERNO", "nom_vial": "10 SUR (RIO MAGDALENA)", "cod_postal": "01090" }, "geometry": { "type": "Point", "coordinates": [ -99.20107945, 19.33602063 ] } },
+{ "type": "Feature", "properties": { "nom_estab": "HOSPITAL OMI CEDROS", "raz_social": "OPERADORA MEDICA INTEGRAL", "nom_vial": "VITO ALESSIO ROBLES", "cod_postal": "01050" }, "geometry": { "type": "Point", "coordinates": [ -99.18546071, 19.35069263 ] } },
+{ "type": "Feature", "properties": { "nom_estab": "HOSPITAL REGIONAL DE ALTA ESPECIALIDAD LIC. ADOLFO LOPEZ MATEOS", "raz_social": "HOSPITAL REGIONAL DE ALTA ESPECIALIDAD LIC. ADOLFO L�PEZ MATEOS", "nom_vial": "UNIVERSIDAD", "cod_postal": "01030" }, "geometry": { "type": "Point", "coordinates": [ -99.17214815, 19.35891614 ] } },
+{ "type": "Feature", "properties": { "nom_estab": "HOSPITAL GENERAL DR FERNANDO QUIROZ GUTIERREZ", "raz_social": "INSTITUTO DE SEGURIDAD Y SERVICIOS SOCIALES DE LOS TRABAJADORES DEL ESTADO", "nom_vial": "GENERAL FELIPE ANGELES", "cod_postal": "01140" }, "geometry": { "type": "Point", "coordinates": [ -99.19396727, 19.39483809 ] } },
+{ "type": "Feature", "properties": { "nom_estab": "HOSPITAL GRAL DE ZONA CON MEDICINA FAMILIAR NUM 8 GILBERTO FLORES IZQUIERDO", "raz_social": null, "nom_vial": "10 SUR (RIO MAGDALENA)", "cod_postal": "01090" }, "geometry": { "type": "Point", "coordinates": [ -99.20126706, 19.3358555 ] } },
+{ "type": "Feature", "properties": { "nom_estab": "HOSPITAL GENERAL DOCTOR ENRIQUE CABRERA", "raz_social": "SECRETAR�A DE SALUD DEL GOBIERNO DE LA CDMX", "nom_vial": "PROLONGACION 5 DE MAYO", "cod_postal": "01620" }, "geometry": { "type": "Point", "coordinates": [ -99.22333262, 19.36166197 ] } },
+{ "type": "Feature", "properties": { "nom_estab": "INSTITUTO DE SEGURIDAD Y SERVICIOS SOCIALES DE LOS TRABAJADORES DEL ESTADO", "raz_social": "INSTITUTO DE SEGURIDAD Y SERVICIOS SOCIALES DE LOS TRABAJADORES DEL ESTADO", "nom_vial": "REVOLUCION", "cod_postal": "01020" }, "geometry": { "type": "Point", "coordinates": [ -99.19031622, 19.35097324 ] } },
+{ "type": "Feature", "properties": { "nom_estab": "INSTITUTO MEXICANO DEL SEGURO SOCIAL NO 161", "raz_social": "IMSS 421231I45", "nom_vial": "TOLUCA", "cod_postal": "01780" }, "geometry": { "type": "Point", "coordinates": [ -99.20829171, 19.34092296 ] } }
+]
+}

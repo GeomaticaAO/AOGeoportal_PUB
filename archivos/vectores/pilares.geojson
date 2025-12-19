@@ -1,0 +1,26 @@
+{
+"type": "FeatureCollection",
+"name": "pilares",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Name": "PILARES \"MIGUEL GAONA ARMENTA\"", "descriptio": "Calle Río Mixcoac s/n, Col. Santa Lucia" }, "geometry": { "type": "Point", "coordinates": [ -99.2516165, 19.3560965, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"ÁRBOL DEL CONOCIMIENTO\"", "descriptio": "Luis G. Urbina s/n, Col. Lomas de Becerra" }, "geometry": { "type": "Point", "coordinates": [ -99.2219345, 19.3842509, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"BARRIO NORTE\"", "descriptio": "Cda. Allende s/n, Col. Barrio Norte" }, "geometry": { "type": "Point", "coordinates": [ -99.2062935, 19.3783751, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"BELÉN DE LAS FLORES\"", "descriptio": "Belén s/n, Col. Belén de las Flores" }, "geometry": { "type": "Point", "coordinates": [ -99.2175544, 19.397034, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"BOSQUES II SECCIÓN\"", "descriptio": "Camino Real a Toluca 1, Col. Bosques 2a. Sección " }, "geometry": { "type": "Point", "coordinates": [ -99.1990687, 19.392305, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"CHAMONTOYA\"", "descriptio": "Azucena lt. 20, Col. Lomas de Chamontoya" }, "geometry": { "type": "Point", "coordinates": [ -99.2680904, 19.3179323, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"EDUARDO DEL RÍO RIUS\"", "descriptio": "Francisco P. Miranda s/n, Col. Merced Gómez" }, "geometry": { "type": "Point", "coordinates": [ -99.1951914, 19.3662518, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"EL CAPULÍN\"", "descriptio": "Prol. Artificios s/n, Col. El Capulín" }, "geometry": { "type": "Point", "coordinates": [ -99.2121897, 19.3956229, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"GÓMEZ FARIAS\"", "descriptio": "Prol. Gómez Farías y prolongación Reforma. Col. Carlos A. Madrazo" }, "geometry": { "type": "Point", "coordinates": [ -99.2496402, 19.3802895, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"ISIDRO FABELA\"", "descriptio": "Antigua Vía a la Venta s/n, Col. Isidro Fabela" }, "geometry": { "type": "Point", "coordinates": [ -99.2088408, 19.3858962, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"JALALPA TEPITO\"", "descriptio": "Encinal s/n, Col. Jalalpa Tepito" }, "geometry": { "type": "Point", "coordinates": [ -99.2373197, 19.3742114, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"JOSÉ SARAMAGO\"", "descriptio": "Av. Río Mixcoac Oriente s/n , Col. Lomas de Plateros" }, "geometry": { "type": "Point", "coordinates": [ -99.2080504, 19.3681987, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES “LA ARAÑA”", "descriptio": "Prol. Río Mixcoac s/n, Col. La Araña" }, "geometry": { "type": "Point", "coordinates": [ -99.2403753, 19.3626302, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"LA CUESTA - ADELA VELARDE\"", "descriptio": "And. Tecalcapa s/n. Col. El Mirador" }, "geometry": { "type": "Point", "coordinates": [ -99.2258269, 19.3455961, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"LAS AGUILAS\"", "descriptio": "Prol. Barranca del muerto s/n, Col. Las Águilas" }, "geometry": { "type": "Point", "coordinates": [ -99.2058479, 19.3620183, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"LOMAS DE BECERRA\"", "descriptio": "Calle Antigua Vía la Venta s/n, Col. Lomas de Becerra" }, "geometry": { "type": "Point", "coordinates": [ -99.2184926, 19.3861302, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"OLIVAR DEL CONDE\"", "descriptio": "Calle 20 S/N , Col. Olivar del Conde 1a Secc." }, "geometry": { "type": "Point", "coordinates": [ -99.2047713, 19.3738639, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"LA CONCHITA\"", "descriptio": "Calle 1 de noviembre s/n, Col. La Conchita" }, "geometry": { "type": "Point", "coordinates": [ -99.2070801, 19.3924297, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "PILARES \"PILOTO\"", "descriptio": "Calle Minas s/n 1 , Colonia Piloto Adolfo Lopez Mateo" }, "geometry": { "type": "Point", "coordinates": [ -99.2324072, 19.3714348, 0.0 ] } }
+]
+}

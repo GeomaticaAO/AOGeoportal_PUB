@@ -364,18 +364,97 @@
     font-weight: 500 !important; /* Medium */
     font-size: 1em;
     color: #333;
+    width: 100%;
   }
    
   .lista-capas li {
-    display: flex;
-    align-items: center;
+    display: block;
     padding: 1px 0;
     font-family: 'Montserrat', sans-serif !important;
     font-weight: 500 !important;
+    width: 100%;
   }
    
    .lista-capas input[type="checkbox"] {
      margin-right: 8px;
+   }
+
+   /* Estilos para el grupo de infraestructuras */
+   .lista-capas-infraestructura {
+     list-style: none;
+     padding-left: 0 !important;
+     margin: 0;
+     background-color: #f9f9f9;
+     border-left: 2px solid #922B21;
+     padding: 8px 0 8px 12px !important;
+     border-radius: 4px;
+     display: block;
+     width: 100%;
+   }
+
+   .lista-capas-infraestructura li {
+     padding: 4px 0;
+     font-size: 0.95em;
+     display: flex;
+     align-items: center;
+     flex-wrap: wrap;
+     width: 100%;
+   }
+
+   .lista-capas-infraestructura li input[type="checkbox"] {
+     flex-shrink: 0;
+   }
+
+   .lista-capas-infraestructura li label {
+     flex: 1;
+     word-wrap: break-word;
+     max-width: calc(100% - 30px);
+   }
+
+   /* Estilos para el grupo de equipamientos urbanos */
+   .lista-capas-equipamientos {
+     list-style: none;
+     padding-left: 0 !important;
+     margin: 0;
+     background-color: #f0f8ff;
+     border-left: 2px solid #1e5a8e;
+     padding: 8px 0 8px 12px !important;
+     border-radius: 4px;
+     display: block;
+     width: 100%;
+   }
+
+   .lista-capas-equipamientos li {
+     padding: 4px 0;
+     font-size: 0.95em;
+     display: flex;
+     align-items: center;
+     flex-wrap: wrap;
+     width: 100%;
+   }
+
+   .lista-capas-equipamientos li input[type="checkbox"] {
+     flex-shrink: 0;
+   }
+
+   .lista-capas-equipamientos li label {
+     flex: 1;
+     word-wrap: break-word;
+     max-width: calc(100% - 30px);
+   }
+
+   /* Estilos para los iconos emoji en el mapa */
+   .emoji-icon {
+     background: transparent !important;
+     border: none !important;
+     text-align: center;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+   }
+
+   .emoji-icon div {
+     filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
    }
    
    /* ======================================

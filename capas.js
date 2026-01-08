@@ -97,8 +97,19 @@ document.addEventListener("DOMContentLoaded", function () {
     grupoInfraestructura.appendChild(listaCapasInfraestructura);
     listaCapas.appendChild(grupoInfraestructura);
     
+    // Función para actualizar el contador en el título
+    window.actualizarContadorInfraestructuras = function() {
+        labelGrupo.innerHTML = `Infraestructuras Álvaro Obregón <span style="color: #922B21; font-weight: bold;">(${window.contadorInfraestructuras.total})</span>`;
+    };
+    
     // Array para almacenar todos los checkboxes de las capas de infraestructura
     const checkboxesInfraestructura = [];
+    
+    // Variable global para rastrear el total de infraestructuras
+    window.contadorInfraestructuras = {
+        total: 0,
+        desglose: {}
+    };
     
     // Función para manejar el checkbox principal
     checkboxGrupo.addEventListener("change", function() {
@@ -207,6 +218,13 @@ fetch(urlCSV)
                 const totalCDC = conteoEstados2["Centros de Desarrollo Comunitario"].Bueno + 
                                  conteoEstados2["Centros de Desarrollo Comunitario"].Regular + 
                                  conteoEstados2["Centros de Desarrollo Comunitario"].Malo;
+
+                // Registrar en el contador global
+                window.contadorInfraestructuras.desglose["Centros de Desarrollo Comunitario"] = totalCDC;
+                window.contadorInfraestructuras.total += totalCDC;
+                if (typeof window.actualizarContadorInfraestructuras === 'function') {
+                    window.actualizarContadorInfraestructuras();
+                }
 
                 const itemCapa = document.createElement("li");
                 itemCapa.style.marginBottom = "10px";
@@ -336,6 +354,13 @@ fetch(urlCSVModulos)
         const totalMD = conteoEstados["Módulos Deportivos"].Bueno + 
                         conteoEstados["Módulos Deportivos"].Regular + 
                         conteoEstados["Módulos Deportivos"].Malo;
+
+        // Registrar en el contador global
+        window.contadorInfraestructuras.desglose["Módulos Deportivos"] = totalMD;
+        window.contadorInfraestructuras.total += totalMD;
+        if (typeof window.actualizarContadorInfraestructuras === 'function') {
+            window.actualizarContadorInfraestructuras();
+        }
 
         const itemCapa = document.createElement("li");
         itemCapa.style.marginBottom = "10px";
@@ -467,6 +492,13 @@ fetch(urlCSVCACI)
                           conteoEstadosCACI["CACI"].Regular + 
                           conteoEstadosCACI["CACI"].Malo;
 
+        // Registrar en el contador global
+        window.contadorInfraestructuras.desglose["CACI"] = totalCACI;
+        window.contadorInfraestructuras.total += totalCACI;
+        if (typeof window.actualizarContadorInfraestructuras === 'function') {
+            window.actualizarContadorInfraestructuras();
+        }
+
         const itemCapa = document.createElement("li");
         itemCapa.style.marginBottom = "10px";
         itemCapa.style.fontSize = "13px";
@@ -593,6 +625,13 @@ fetch(urlCSVCC)
                         conteoEstadosCC["Centros Culturales"].Regular + 
                         conteoEstadosCC["Centros Culturales"].Malo;
 
+        // Registrar en el contador global
+        window.contadorInfraestructuras.desglose["Centros Culturales"] = totalCC;
+        window.contadorInfraestructuras.total += totalCC;
+        if (typeof window.actualizarContadorInfraestructuras === 'function') {
+            window.actualizarContadorInfraestructuras();
+        }
+
         const itemCapa = document.createElement("li");
         itemCapa.style.marginBottom = "10px";
         itemCapa.style.fontSize = "13px";
@@ -717,6 +756,13 @@ fetch(urlCSV_CI)
         const totalCI = conteoEstadosCI["Centros Interactivos"].Bueno + 
                         conteoEstadosCI["Centros Interactivos"].Regular + 
                         conteoEstadosCI["Centros Interactivos"].Malo;
+
+        // Registrar en el contador global
+        window.contadorInfraestructuras.desglose["Centros Interactivos"] = totalCI;
+        window.contadorInfraestructuras.total += totalCI;
+        if (typeof window.actualizarContadorInfraestructuras === 'function') {
+            window.actualizarContadorInfraestructuras();
+        }
 
         const itemCapa = document.createElement("li");
         itemCapa.style.marginBottom = "10px";
@@ -843,6 +889,13 @@ fetch(urlCSV_CAM)
                          conteoEstadosCAM["Casas del Adulto Mayor"].Regular + 
                          conteoEstadosCAM["Casas del Adulto Mayor"].Malo;
 
+        // Registrar en el contador global
+        window.contadorInfraestructuras.desglose["Casas del Adulto Mayor"] = totalCAM;
+        window.contadorInfraestructuras.total += totalCAM;
+        if (typeof window.actualizarContadorInfraestructuras === 'function') {
+            window.actualizarContadorInfraestructuras();
+        }
+
         const itemCapa = document.createElement("li");
         itemCapa.style.marginBottom = "10px";
         itemCapa.style.fontSize = "13px";
@@ -966,6 +1019,13 @@ fetch(urlCSV_CAO)
         const totalCAO = conteoEstadosCAO["Centros de Artes y Oficios"].Bueno + 
                          conteoEstadosCAO["Centros de Artes y Oficios"].Regular + 
                          conteoEstadosCAO["Centros de Artes y Oficios"].Malo;
+
+        // Registrar en el contador global
+        window.contadorInfraestructuras.desglose["Centros de Artes y Oficios"] = totalCAO;
+        window.contadorInfraestructuras.total += totalCAO;
+        if (typeof window.actualizarContadorInfraestructuras === 'function') {
+            window.actualizarContadorInfraestructuras();
+        }
 
         const itemCapa = document.createElement("li");
         itemCapa.style.marginBottom = "10px";

@@ -130,12 +130,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!container) return;
 
         const toggleIDS = document.getElementById('toggleIDSCheckbox');
-        const toggleZonas = document.getElementById('toggleSeccionesCheckbox');
         
         const idsActivo = toggleIDS && toggleIDS.checked;
-        const zonasActivo = toggleZonas && toggleZonas.checked;
 
-        if (!idsActivo && !zonasActivo) {
+        if (!idsActivo) {
             container.style.display = 'none';
             return;
         }
@@ -145,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (idsActivo) {
             html += `
-                <div style="margin-bottom: ${zonasActivo ? '10px' : '0'};">
+                <div>
                     <div style="font-weight: bold; margin-bottom: 5px; font-size: 11px;">Índice de Desarrollo Social</div>
                     <div style="display: flex; align-items: center; margin-bottom: 3px;">
                         <div style="width: 20px; height: 15px; background-color: #08810C; margin-right: 5px; border: 1px solid #333;"></div>
@@ -166,42 +164,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div style="display: flex; align-items: center; margin-bottom: 3px;">
                         <div style="width: 20px; height: 15px; background-color: #641E16; margin-right: 5px; border: 1px solid #333;"></div>
                         <span>Muy bajo</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        if (zonasActivo) {
-            html += `
-                <div>
-                    <div style="font-weight: bold; margin-bottom: 5px; font-size: 11px;">Zonas</div>
-                    <div style="display: flex; align-items: center; margin-bottom: 3px;">
-                        <div style="width: 20px; height: 15px; background-color: #8B1538; margin-right: 5px; border: 1px solid #333;"></div>
-                        <span>AA - Guinda</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 3px;">
-                        <div style="width: 20px; height: 15px; background-color: #FF6B35; margin-right: 5px; border: 1px solid #333;"></div>
-                        <span>BA - Naranja</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 3px;">
-                        <div style="width: 20px; height: 15px; background-color: #F5DEB3; margin-right: 5px; border: 1px solid #333;"></div>
-                        <span>CA - Beige</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 3px;">
-                        <div style="width: 20px; height: 15px; background-color: #28A745; margin-right: 5px; border: 1px solid #333;"></div>
-                        <span>AB - Verde</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 3px;">
-                        <div style="width: 20px; height: 15px; background-color: #FFD700; margin-right: 5px; border: 1px solid #333;"></div>
-                        <span>BB - Amarillo</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 3px;">
-                        <div style="width: 20px; height: 15px; background-color: #87CEEB; margin-right: 5px; border: 1px solid #333;"></div>
-                        <span>CC - Azul claro</span>
-                    </div>
-                    <div style="display: flex; align-items: center; margin-bottom: 3px;">
-                        <div style="width: 20px; height: 15px; background-color: #1E3A8A; margin-right: 5px; border: 1px solid #333;"></div>
-                        <span>DD - Azul fuerte</span>
                     </div>
                 </div>
             `;

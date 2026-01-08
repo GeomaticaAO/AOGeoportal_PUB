@@ -153,13 +153,6 @@
                 Índice de Desarrollo Social
               </label>
             </div>
-            <!-- Checkbox para la capa de Zonas -->
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="toggleSeccionesCheckbox" disabled>
-              <label class="form-check-label" for="toggleSeccionesCheckbox">
-                Zonas
-              </label>
-            </div>
           </div>
           <!-- Botón ubicado en la parte inferior de la barra lateral -->
           <div class="sidebar-footer">
@@ -202,8 +195,6 @@
     <script src="Capa_Colonia.js?v=3"></script>
     <!-- Script para incorporar capa de polígonos (IDS_AO) -->
     <script src="Capa_pol.js?v=3"></script>
-    <!-- Script para incorporar capa de Secciones (Zonas) -->
-    <script src="Capa_secciones.js?v=2"></script>
     <!-- Script que maneja la lógica del buscador de colonias -->
     <script src="buscador.js?v=2"></script>
     <!-- Script donde se definen las capas temáticas, info a mostrar e íconos -->
@@ -253,29 +244,6 @@
           });
         } else {
           console.error("No se encontró el checkbox para encender/apagar la capa IDS_AO.");
-        }
-
-        // Control para la capa de Zonas
-        var toggleSeccionesCheckbox = document.getElementById("toggleSeccionesCheckbox");
-        if (toggleSeccionesCheckbox) {
-          toggleSeccionesCheckbox.addEventListener("change", function() {
-            if (this.checked) {
-              if (window.Secciones_layer && map.geojsonSeccionesLayerGroup) {
-                map.geojsonSeccionesLayerGroup.addLayer(window.Secciones_layer);
-                window.Secciones_layer.eachLayer(layer => layer.bringToBack());
-              }
-            } else {
-              if (window.Secciones_layer && map.geojsonSeccionesLayerGroup) {
-                map.geojsonSeccionesLayerGroup.removeLayer(window.Secciones_layer);
-              }
-            }
-            // Actualizar simbología
-            if (typeof window.actualizarSimbologia === 'function') {
-              window.actualizarSimbologia();
-            }
-          });
-        } else {
-          console.error("No se encontró el checkbox para encender/apagar la capa de Zonas.");
         }
 
         // Agregar evento al botón "Consulta otros mapas"

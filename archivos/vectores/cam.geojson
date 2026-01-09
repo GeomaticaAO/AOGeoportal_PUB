@@ -1,0 +1,11 @@
+{
+"type": "FeatureCollection",
+"name": "cam",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "descriptio": "CENTRO DE ATENCIÓN MÚLTIPLE No. 100 \"CONFE\"", "ID": 1, "NIVEL": "ESPECIAL - CAM", "NOMBRE": "CENTRO DE ATENCIÓN MÚLTIPLE No. 100 \"CONFE\"", "TURNO": "TIEMPO COMPLETO", "DOMICILIO": "CALLE BIZNAGA 43", "COLONIA": "LAS PALMAS", "TELÉFONO": 52921390, "MATRÍC": 51, "AULAS": 6 }, "geometry": { "type": "Point", "coordinates": [ -99.2109666, 19.3983311, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "CENTRO DE ATENCIÓN MÚLTIPLE No. 37", "ID": 2, "NIVEL": "ESPECIAL - CAM", "NOMBRE": "CENTRO DE ATENCIÓN MÚLTIPLE No. 37", "TURNO": "TIEMPO COMPLETO", "DOMICILIO": "CALLE LIC. FRANCISCO BENÍTEZ 82", "COLONIA": "PROGRESO", "TELÉFONO": 55953659, "MATRÍC": 54, "AULAS": 6 }, "geometry": { "type": "Point", "coordinates": [ -99.2091058, 19.3374404, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "CENTRO DE ATENCIÓN MÚLTIPLE No. 6", "ID": 3, "NIVEL": "ESPECIAL - CAM", "NOMBRE": "CENTRO DE ATENCIÓN MÚLTIPLE No. 6", "TURNO": "TIEMPO COMPLETO", "DOMICILIO": "CALLE ANTIGUO CAMINO ACAPULCO 128", "COLONIA": "PROGRESO", "TELÉFONO": 56684022, "MATRÍC": 276, "AULAS": 21 }, "geometry": { "type": "Point", "coordinates": [ -99.2039239, 19.3431222, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "CENTRO DE ATENCIÓN MÚLTIPLE No. 7", "ID": 4, "NIVEL": "ESPECIAL - CAM", "NOMBRE": "CENTRO DE ATENCIÓN MÚLTIPLE No. 7", "TURNO": "TIEMPO COMPLETO", "DOMICILIO": "CALZADA DE LAS ÁGUILAS S/N", "COLONIA": "LOMAS DE AXOMIATLA", "TELÉFONO": 56350903, "MATRÍC": 138, "AULAS": 14 }, "geometry": { "type": "Point", "coordinates": [ -99.251376098787105, 19.342276499498301, 0.0 ] } }
+]
+}

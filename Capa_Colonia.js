@@ -79,6 +79,11 @@ document.addEventListener("DOMContentLoaded", function () {
               layer.on("click", function () {
                 seleccionarColonia(layer);
               });
+
+              // Evento cuando se cierra el popup
+              layer.on("popupclose", function () {
+                restaurarColoniasOriginales();
+              });
             }
           }
         }).addTo(map);
@@ -133,6 +138,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 300);
 
     layer.openPopup();
+  }
+
+  function restaurarColoniasOriginales() {
+    if (!capaColonias) return;
+
+    capaColonias.eachLayer(capa => {
+      capa.setStyle(estiloColoniasBase);
+    });
+
+    coloniaSeleccionada = null;
   }
 
   window.zoomAColonia = function (nombreColonia) {

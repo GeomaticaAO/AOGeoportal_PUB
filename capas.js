@@ -1462,7 +1462,7 @@ fetch("archivos/vectores/preescolar.geojson")
   .then(response => response.json())
   .then(data => {
     const iconoPreescolar = L.divIcon({
-      html: '<div style="font-size: 26px; line-height: 1;">👶</div>',
+      html: '<div style="font-size: 26px; line-height: 1;">&#128103;</div>',
       className: 'emoji-icon',
       iconSize: [26, 26],
       iconAnchor: [13, 13],
@@ -1475,9 +1475,14 @@ fetch("archivos/vectores/preescolar.geojson")
       const props = feature.properties;
       const coords = feature.geometry.coordinates;
 
-      let popup = `<b>${props.nombre || 'Preescolar'}</b><br>`;
-      if (props.domicilio) popup += `<b>Domicilio:</b> ${props.domicilio}<br>`;
-      if (props.colonia) popup += `<b>Colonia:</b> ${props.colonia}<br>`;
+      let popup = `<b>${props.NOMBRE || 'Preescolar'}</b><br>`;
+      if (props.NIVEL) popup += `<b>Nivel:</b> ${props.NIVEL}<br>`;
+      if (props.DOMICILIO) popup += `<b>Domicilio:</b> ${props.DOMICILIO}<br>`;
+      if (props.COLONIA) popup += `<b>Colonia:</b> ${props.COLONIA}<br>`;
+      if (props.TURNO) popup += `<b>Turno:</b> ${props.TURNO}<br>`;
+      if (props.TELÉFONO) popup += `<b>Teléfono:</b> ${props.TELÉFONO}<br>`;
+      if (props.MATRÍC) popup += `<b>Matrícula:</b> ${props.MATRÍC} alumnos<br>`;
+      if (props.AULAS) popup += `<b>Aulas:</b> ${props.AULAS}<br>`;
 
       const marker = L.marker([coords[1], coords[0]], {
         icon: iconoPreescolar,
@@ -1488,7 +1493,7 @@ fetch("archivos/vectores/preescolar.geojson")
 
       if (typeof registrarElementoBuscable === "function") {
         registrarElementoBuscable({
-          nombre: props.nombre || 'Preescolar',
+          nombre: props.NOMBRE || 'Preescolar',
           capa: "Preescolar",
           marker: marker
         });
@@ -1519,7 +1524,7 @@ fetch("archivos/vectores/preescolar.geojson")
     label.style.cursor = "pointer";
     label.innerHTML = `
       <span style="color: #555;">(${data.features.length})</span>
-      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">👶</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">&#128103;</span>
       Preescolar
     `;
 
@@ -1550,9 +1555,14 @@ fetch("archivos/vectores/primarias.geojson")
       const props = feature.properties;
       const coords = feature.geometry.coordinates;
 
-      let popup = `<b>${props.nombre || 'Primaria'}</b><br>`;
-      if (props.domicilio) popup += `<b>Domicilio:</b> ${props.domicilio}<br>`;
-      if (props.colonia) popup += `<b>Colonia:</b> ${props.colonia}<br>`;
+      let popup = `<b>${props.NOMBRE || 'Primaria'}</b><br>`;
+      if (props.NIVEL) popup += `<b>Nivel:</b> ${props.NIVEL}<br>`;
+      if (props.DOMICILIO) popup += `<b>Domicilio:</b> ${props.DOMICILIO}<br>`;
+      if (props.COLONIA) popup += `<b>Colonia:</b> ${props.COLONIA}<br>`;
+      if (props.TURNO) popup += `<b>Turno:</b> ${props.TURNO}<br>`;
+      if (props.TELEFONO) popup += `<b>Teléfono:</b> ${props.TELEFONO}<br>`;
+      if (props.MATRICULA) popup += `<b>Matrícula:</b> ${props.MATRICULA} alumnos<br>`;
+      if (props.AULAS) popup += `<b>Aulas:</b> ${props.AULAS}<br>`;
 
       const marker = L.marker([coords[1], coords[0]], {
         icon: iconoPrimaria,
@@ -1563,7 +1573,7 @@ fetch("archivos/vectores/primarias.geojson")
 
       if (typeof registrarElementoBuscable === "function") {
         registrarElementoBuscable({
-          nombre: props.nombre || 'Primaria',
+          nombre: props.NOMBRE || 'Primaria',
           capa: "Primarias",
           marker: marker
         });
@@ -1625,9 +1635,14 @@ fetch("archivos/vectores/secundarias.geojson")
       const props = feature.properties;
       const coords = feature.geometry.coordinates;
 
-      let popup = `<b>${props.nombre || 'Secundaria'}</b><br>`;
-      if (props.domicilio) popup += `<b>Domicilio:</b> ${props.domicilio}<br>`;
-      if (props.colonia) popup += `<b>Colonia:</b> ${props.colonia}<br>`;
+      let popup = `<b>${props.NOMBRE || 'Secundaria'}</b><br>`;
+      if (props.NIVEL) popup += `<b>Nivel:</b> ${props.NIVEL}<br>`;
+      if (props.DOMICILIO) popup += `<b>Domicilio:</b> ${props.DOMICILIO}<br>`;
+      if (props.COLONIA) popup += `<b>Colonia:</b> ${props.COLONIA}<br>`;
+      if (props.TURNO) popup += `<b>Turno:</b> ${props.TURNO}<br>`;
+      if (props.TELÉFONO) popup += `<b>Teléfono:</b> ${props.TELÉFONO}<br>`;
+      if (props.MATRÍC) popup += `<b>Matrícula:</b> ${props.MATRÍC} alumnos<br>`;
+      if (props.AULAS) popup += `<b>Aulas:</b> ${props.AULAS}<br>`;
 
       const marker = L.marker([coords[1], coords[0]], {
         icon: iconoSecundaria,
@@ -1638,7 +1653,7 @@ fetch("archivos/vectores/secundarias.geojson")
 
       if (typeof registrarElementoBuscable === "function") {
         registrarElementoBuscable({
-          nombre: props.nombre || 'Secundaria',
+          nombre: props.NOMBRE || 'Secundaria',
           capa: "Secundarias",
           marker: marker
         });
@@ -1680,4 +1695,88 @@ fetch("archivos/vectores/secundarias.geojson")
   })
   .catch(error => console.error("Error al cargar Secundarias:", error));
 
+});
+
+// ============================================================================
+// 🎯 CAPA: CENTROS DE ATENCIÓN MÚLTIPLE (CAM)
+// ============================================================================
+document.addEventListener("DOMContentLoaded", function() {
+  fetch("archivos/vectores/cam.geojson")
+    .then(response => response.json())
+    .then(data => {
+      const iconoCAM = L.divIcon({
+        html: '<div style="font-size: 26px; line-height: 1;">&#129665;</div>',
+        className: 'emoji-icon',
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+        popupAnchor: [0, -13]
+      });
+
+      const grupoCAM = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+      data.features.forEach(feature => {
+        const props = feature.properties;
+        const coords = feature.geometry.coordinates;
+
+        let popup = `<b>${props.NOMBRE || 'CAM'}</b><br>`;
+        if (props.NIVEL) popup += `<b>Nivel:</b> ${props.NIVEL}<br>`;
+        if (props.DOMICILIO) popup += `<b>Domicilio:</b> ${props.DOMICILIO}<br>`;
+        if (props.COLONIA) popup += `<b>Colonia:</b> ${props.COLONIA}<br>`;
+        if (props.TURNO) popup += `<b>Turno:</b> ${props.TURNO}<br>`;
+        if (props.TELÉFONO) popup += `<b>Teléfono:</b> ${props.TELÉFONO}<br>`;
+        if (props.MATRÍC) popup += `<b>Matrícula:</b> ${props.MATRÍC} alumnos<br>`;
+        if (props.AULAS) popup += `<b>Aulas:</b> ${props.AULAS}<br>`;
+
+        const marker = L.marker([coords[1], coords[0]], {
+          icon: iconoCAM,
+          pane: 'capasPuntosPane'
+        }).bindPopup(popup);
+
+        grupoCAM.addLayer(marker);
+
+        if (typeof registrarElementoBuscable === "function") {
+          registrarElementoBuscable({
+            nombre: props.NOMBRE || 'CAM',
+            capa: "Centros de Atención Múltiple",
+            marker: marker
+          });
+        }
+      });
+
+      // Agregar al panel al final
+      const listaCapasEquipamientos = document.querySelector(".lista-capas-equipamientos");
+      if (listaCapasEquipamientos) {
+        const itemCapa = document.createElement("li");
+        itemCapa.style.marginBottom = "10px";
+        itemCapa.style.fontSize = "13px";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = false;
+        checkbox.id = "checkboxCAMEducacion";
+
+        checkbox.addEventListener("change", function() {
+          if (checkbox.checked) {
+            grupoCAM.addTo(map);
+          } else {
+            map.removeLayer(grupoCAM);
+          }
+        });
+
+        const label = document.createElement("label");
+        label.htmlFor = "checkboxCAMEducacion";
+        label.style.marginLeft = "6px";
+        label.style.cursor = "pointer";
+        label.innerHTML = `
+          <span style="color: #555;">(${data.features.length})</span>
+          <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">&#129665;</span>
+          Centros de Atención Múltiple
+        `;
+
+        itemCapa.appendChild(checkbox);
+        itemCapa.appendChild(label);
+        listaCapasEquipamientos.appendChild(itemCapa);
+      }
+    })
+    .catch(error => console.error("Error al cargar Centros de Atención Múltiple:", error));
 });

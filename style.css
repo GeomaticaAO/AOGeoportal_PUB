@@ -326,6 +326,34 @@
      border-top-color: #922B21 !important;
    }
 
+   /* Tooltips simplificados para búsqueda de actividades (solo nombre) */
+   .tooltip-busqueda-simple {
+     background-color: white;
+     color: #333;
+     border: 2px solid #922B21;
+     border-radius: 4px;
+     padding: 6px 10px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+     white-space: nowrap;
+     opacity: 0.95 !important;
+     pointer-events: auto;
+     cursor: pointer;
+     margin-bottom: 15px !important;
+   }
+
+   .tooltip-busqueda-simple::before {
+     border-top-color: white !important;
+   }
+
+   .tooltip-busqueda-simple:hover {
+     opacity: 1 !important;
+     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+     border-color: #7a1f1a;
+   }
+
       /* ======================================
       POPUP
       ====================================== */

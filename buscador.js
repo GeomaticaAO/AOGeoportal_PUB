@@ -153,25 +153,35 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (bounds.isValid()) {
                                 map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
                                 
-                                // Para múltiples marcadores, usar tooltips permanentes en lugar de popups
+                                // Para múltiples marcadores, usar tooltips simples con solo el nombre
                                 setTimeout(() => {
                                     item.marcadores.forEach(markerInfo => {
                                         if (markerInfo.marker) {
-                                            // Obtener el contenido del popup
-                                            const popupContent = markerInfo.marker.getPopup().getContent();
-                                            
-                                            // Crear tooltip permanente con el contenido del popup
+                                            // Crear tooltip simplificado con solo el nombre del centro
                                             if (!markerInfo.marker._tooltipBusqueda) {
                                                 markerInfo.marker._tooltipBusqueda = L.tooltip({
                                                     permanent: true,
                                                     direction: 'top',
-                                                    className: 'tooltip-busqueda',
-                                                    opacity: 0.95
-                                                }).setContent(popupContent);
+                                                    className: 'tooltip-busqueda-simple',
+                                                    opacity: 0.95,
+                                                    offset: [0, -25]  // Mover el tooltip más arriba
+                                                }).setContent(`<strong>${markerInfo.nombre}</strong>`);
                                                 
                                                 markerInfo.marker.bindTooltip(markerInfo.marker._tooltipBusqueda);
                                             }
                                             markerInfo.marker.openTooltip();
+                                            
+                                            // Al hacer clic, cerrar el tooltip y abrir el popup completo
+                                            markerInfo.marker.off('click');  // Remover eventos anteriores
+                                            markerInfo.marker.on('click', function() {
+                                                // Cerrar el tooltip de búsqueda
+                                                if (this._tooltipBusqueda) {
+                                                    this.unbindTooltip();
+                                                    delete this._tooltipBusqueda;
+                                                }
+                                                // Abrir el popup completo
+                                                this.openPopup();
+                                            });
                                         }
                                     });
                                 }, 500);
@@ -216,7 +226,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     actividadesPorNombre[actividadNormalizada].marcadores.push({
                         marker: marker,
-                        checkboxId: checkboxId
+                        checkboxId: checkboxId,
+                        nombre: nombre  // Guardar el nombre del centro para el tooltip
                     });
                 }
             });

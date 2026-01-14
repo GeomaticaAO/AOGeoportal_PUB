@@ -282,6 +282,50 @@
      background-color: #f0f0f0;
    }
 
+   /* Botón limpiar búsqueda */
+   .btn-limpiar-busqueda {
+     margin-top: 8px;
+     padding: 6px 16px;
+     background-color: #922B21;
+     color: white;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 500;
+     transition: background-color 0.3s ease;
+     width: 100%;
+   }
+
+   .btn-limpiar-busqueda:hover {
+     background-color: #7a1f1a;
+   }
+
+   .btn-limpiar-busqueda:active {
+     background-color: #641E16;
+   }
+
+   /* Tooltips de búsqueda (para mostrar múltiples resultados) */
+   .tooltip-busqueda {
+     background-color: white;
+     color: #333;
+     border: 2px solid #922B21;
+     border-radius: 6px;
+     padding: 8px 12px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 500;
+     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+     white-space: nowrap;
+     opacity: 0.95 !important;
+     pointer-events: auto;
+   }
+
+   .tooltip-busqueda::before {
+     border-top-color: #922B21 !important;
+   }
+
       /* ======================================
       POPUP
       ====================================== */
@@ -291,6 +335,30 @@
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 500 !important;
   color: #333;
+}
+
+/* Reducir tamaño de letra del contenido del modal de estadísticas */
+#estadisticasInfo {
+  font-size: 12px !important;
+}
+
+#estadisticasInfo p {
+  font-size: 12px !important;
+  margin: 3px 0 !important;
+}
+
+#estadisticasInfo table {
+  font-size: 11px !important;
+}
+
+#estadisticasInfo th,
+#estadisticasInfo td {
+  padding: 4px 6px !important;
+  font-size: 11px !important;
+}
+
+#estadisticasModalLabel {
+  font-size: 18px !important;
 }
 
 /* Ajustes en la apariencia del popup */
@@ -473,6 +541,12 @@
 
    .emoji-icon div {
      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+     text-shadow: 0 0 3px #922B21, 0 0 3px #922B21, 0 0 3px #922B21, 0 0 5px #922B21;
+   }
+
+   /* Halo blanco para iconos de infraestructuras PNG */
+   .icono-infraestructura {
+     filter: drop-shadow(0 0 1px #922B21) drop-shadow(0 0 1px #922B21) drop-shadow(0 0 2px #922B21);
    }
    
    /* ======================================
@@ -727,6 +801,34 @@
 #estadisticasChart {
     width: 10% !important;
     height: 10% !important;
+}
+
+/* ======================================
+   Animación para el botón de geolocalización
+   ====================================== */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animación de pulso para el marcador de ubicación */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
 }
 
 

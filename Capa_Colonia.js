@@ -76,6 +76,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
               layer.bindPopup(popupContent);
 
+              // Crear tooltip con el nombre de la colonia
+              const tooltip = L.tooltip({
+                permanent: true,
+                direction: 'center',
+                className: 'colonia-label',
+                opacity: 0.9
+              }).setContent(nombreColonia);
+              
+              layer.bindTooltip(tooltip);
+              
+              // Mostrar/ocultar etiquetas según el zoom
+              layer._updateLabel = function() {
+                const zoom = map.getZoom();
+                if (zoom >= 17) {
+                  if (!layer.getTooltip().isOpen()) {
+                    layer.openTooltip();
+                  }
+                } else {
+                  if (layer.getTooltip().isOpen()) {
+                    layer.closeTooltip();
+                  }
+                }
+              };
+
               layer.on("click", function () {
                 seleccionarColonia(layer);
               });
@@ -87,6 +111,28 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           }
         }).addTo(map);
+
+        // Actualizar etiquetas en el evento de zoom
+        map.on('zoomend', function() {
+          if (capaColonias) {
+            capaColonias.eachLayer(function(layer) {
+              if (layer._updateLabel) {
+                layer._updateLabel();
+              }
+            });
+          }
+        });
+
+        // Inicializar estado de las etiquetas
+        setTimeout(function() {
+          if (capaColonias) {
+            capaColonias.eachLayer(function(layer) {
+              if (layer._updateLabel) {
+                layer._updateLabel();
+              }
+            });
+          }
+        }, 100);
 
         // Habilitar el checkbox de colonias
         var toggleColoniasCheckbox = document.getElementById("toggleColoniasCheckbox");

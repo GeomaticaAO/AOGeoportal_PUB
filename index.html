@@ -24,7 +24,7 @@
     <!-- Iconos de Bootstrap  -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <!-- Hoja de estilos personalizada del proyecto -->
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=7">
     <!-- Estilos extra para el botón de consulta en el sidebar -->
     <style>
       /* Mantener la estructura de la barra lateral */
@@ -109,7 +109,9 @@
           </div>
           <div class="modal-body">
             <div id="estadisticasInfo"></div>
-            <canvas id="estadisticasChart"></canvas>
+            <div style="margin-top: 15px;">
+              <canvas id="piramidePoblacional" style="max-height: 300px;"></canvas>
+            </div>
           </div>
           <div class="modal-footer">
             <p class="small mb-0">
@@ -133,8 +135,9 @@
             <!-- Campo de búsqueda de Colonias -->
             <div class="form">
               <label class="label_buscar_colonia" for="floatingInput">Buscador</label>
-              <input type="text" class="form-control" id="floatingInput" placeholder="Escribir Colonia o Sitio">
+              <input type="text" class="form-control" id="floatingInput" placeholder="Escribir Colonia, Sitio o Actividad">
               <div id="suggestions" class="suggestions"></div>
+              <button id="btnLimpiarBusqueda" class="btn-limpiar-busqueda">Limpiar</button>
             </div>
           </div>
           <!-- Contenedor donde se agregarán dinámicamente los controles de capas -->
@@ -146,11 +149,25 @@
                 Colonias
               </label>
             </div>
+            <!-- Checkbox para la capa de Población -->
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="togglePoblacionCheckbox" disabled>
+              <label class="form-check-label" for="togglePoblacionCheckbox">
+                Población
+              </label>
+            </div>
             <!-- Checkbox para la capa IDS_AO -->
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="toggleIDSCheckbox" disabled>
               <label class="form-check-label" for="toggleIDSCheckbox">
                 Índice de Desarrollo Social
+              </label>
+            </div>
+            <!-- Checkbox para la capa de Unidades Habitacionales -->
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="toggleUHabitacionalesCheckbox" disabled>
+              <label class="form-check-label" for="toggleUHabitacionalesCheckbox">
+                Unidades Habitacionales
               </label>
             </div>
           </div>
@@ -183,22 +200,26 @@
     <!-- Chart.js: Biblioteca para generar gráficas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Script que controla la visualización y lógica de las estadísticas en el modal -->
-    <script src="estadisticas.js?v=2"></script>
+    <script src="estadisticas.js?v=11"></script>
     <!-- Script que controla la actualización de las capas cada 10 segundos -->
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
     <!-- CONSULTA DE LÓGICA JAVASCRIPT -->
 
     <!-- Script que inicializa el mapa base -->
-    <script src="mapabase.js?v=4"></script>
+    <script src="mapabase.js?v=8"></script>
     <!-- Script que define y carga la capa de Colonias en el mapa -->
     <script src="Capa_Colonia.js?v=3"></script>
+    <!-- Script para incorporar capa de Población -->
+    <script src="Capa_Poblacion.js?v=5"></script>
     <!-- Script para incorporar capa de polígonos (IDS_AO) -->
     <script src="Capa_pol.js?v=3"></script>
+    <!-- Script para incorporar capa de Unidades Habitacionales -->
+    <script src="Capa_u_habitacionales.js?v=1"></script>
     <!-- Script que maneja la lógica del buscador de colonias -->
-    <script src="buscador.js?v=2"></script>
+    <script src="buscador.js?v=6"></script>
     <!-- Script donde se definen las capas temáticas, info a mostrar e íconos -->
-    <script src="capas.js?v=5"></script>
+    <script src="capas.js?v=6"></script>
     <!-- Script principal que contiene lógica de menú lateral -->
     <script src="script.js?v=2"></script>
 
@@ -223,6 +244,29 @@
           console.error("No se encontró el checkbox para encender/apagar la capa de Colonias.");
         }
 
+        // Control para la capa de Población
+        var togglePoblacionCheckbox = document.getElementById("togglePoblacionCheckbox");
+        if (togglePoblacionCheckbox) {
+          togglePoblacionCheckbox.addEventListener("change", function() {
+            if (this.checked) {
+              if (window.capaPoblacion) {
+                map.addLayer(window.capaPoblacion);
+                window.capaPoblacion.eachLayer(layer => layer.bringToBack());
+              }
+            } else {
+              if (window.capaPoblacion) {
+                map.removeLayer(window.capaPoblacion);
+              }
+            }
+            // Actualizar simbología
+            if (typeof window.actualizarSimbologia === 'function') {
+              window.actualizarSimbologia();
+            }
+          });
+        } else {
+          console.error("No se encontró el checkbox para encender/apagar la capa de Población.");
+        }
+
         // Control para la capa IDS_AO
         var toggleCheckbox = document.getElementById("toggleIDSCheckbox");
         if (toggleCheckbox) {
@@ -240,6 +284,25 @@
             // Actualizar simbología
             if (typeof window.actualizarSimbologia === 'function') {
               window.actualizarSimbologia();
+            }
+          });
+        } else {
+          console.error("No se encontró el checkbox para la capa IDS.");
+        }
+
+        // Control para la capa de Unidades Habitacionales
+        var toggleUHCheckbox = document.getElementById("toggleUHabitacionalesCheckbox");
+        if (toggleUHCheckbox) {
+          toggleUHCheckbox.addEventListener("change", function() {
+            if (this.checked) {
+              if (window.U_Habitacionales_layer) {
+                window.U_Habitacionales_layer.addTo(map);
+                window.U_Habitacionales_layer.eachLayer(layer => layer.bringToBack());
+              }
+            } else {
+              if (window.U_Habitacionales_layer) {
+                map.removeLayer(window.U_Habitacionales_layer);
+              }
             }
           });
         } else {

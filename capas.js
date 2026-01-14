@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function () {
     if (typeof L === "undefined" || typeof map === "undefined") {
         console.error("Leaflet o el mapa no están definidos.");
         return;
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     labelGrupo.style.cursor = "pointer";
     labelGrupo.style.fontSize = "14px";
     labelGrupo.style.flex = "1";
-    labelGrupo.textContent = "Infraestructuras Álvaro Obregón";
+    labelGrupo.textContent = "Infraestructuras Sociales Álvaro Obregón";
     
     // Contenedor de capas hijas (sublista)
     const listaCapasInfraestructura = document.createElement("ul");
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Función para actualizar el contador en el título
     window.actualizarContadorInfraestructuras = function() {
-        labelGrupo.innerHTML = `Infraestructuras Álvaro Obregón <span style="color: #922B21; font-weight: bold;">(${window.contadorInfraestructuras.total})</span>`;
+        labelGrupo.innerHTML = `Infraestructuras Sociales Álvaro Obregón <span style="color: #922B21; font-weight: bold;">(${window.contadorInfraestructuras.total})</span>`;
     };
     
     // Array para almacenar todos los checkboxes de las capas de infraestructura
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
 const urlCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHAUUwIZdDhl16SZRrr1B7ecSWWCoYFYEXorSWP12U_0FEwoefgkVzaslXDCn4ww/pub?output=csv";
 
 // 🔸 Icono único para CDC
-const iconoCDC = L.icon({ iconUrl: "img/icono/CDC.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20] });
+const iconoCDC = L.icon({ iconUrl: "img/icono/CDC.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20], className: 'icono-infraestructura' });
 
 // 🔹 Conteo por estado
 const conteoEstados2 = {
@@ -195,11 +195,24 @@ fetch(urlCSV)
 
                         gruposPorEstado[estadoNormalizado].addLayer(marker);
 
+                        // Extraer actividades de actGratis y actCosto
+                        const actividades = [];
+                        if (actGratis) {
+                            const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+                            actividades.push(...actividadesGratis);
+                        }
+                        if (actCosto) {
+                            const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+                            actividades.push(...actividadesCosto);
+                        }
+
                         if (typeof registrarElementoBuscable === "function") {
                             registrarElementoBuscable({
                                 nombre: name,
                                 capa: "Centros de Desarrollo Comunitario",
-                                marker: marker
+                                marker: marker,
+                                checkboxId: "checkboxCDC",
+                                actividades: actividades
                             });
                         }
 
@@ -264,23 +277,14 @@ fetch(urlCSV)
 
 
 
-    // Capa: Módulos Deportivos
+    // Capa: Centros Deportivos (agrupados por Tipo)
 const urlCSVModulos = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTB17wAqRP0vSPM2x68YQBluo4oaYYtMLydDev0yDpqV65Gsx5brSHRTs7aX9rixw/pub?output=csv";
 
-// Icono único para Módulos Deportivos
-const iconoModulos = L.icon({ iconUrl: "img/icono/modulos.png", iconSize: [20, 30], iconAnchor: [25, 20], popupAnchor: [10, -20] });
+// Icono único para Centros Deportivos
+const iconoModulos = L.icon({ iconUrl: "img/icono/modulos.png", iconSize: [20, 30], iconAnchor: [25, 20], popupAnchor: [10, -20], className: 'icono-infraestructura' });
 
-// 🧮 Conteo por estado
-const conteoEstados = {
-  "Módulos Deportivos": { Bueno: 0, Regular: 0, Malo: 0 }
-};
-
-// 🗂️ Agrupación por estado
-const gruposPorEstado2 = {
-  "Bueno": L.layerGroup([], { pane: 'capasPuntosPane' }),
-  "Regular": L.layerGroup([], { pane: 'capasPuntosPane' }),
-  "Malo": L.layerGroup([], { pane: 'capasPuntosPane' })
-};
+// 🗂️ Agrupación por Tipo
+const gruposPorTipoCD = {};
 
 fetch(urlCSVModulos)
   .then(response => response.text())
@@ -293,7 +297,7 @@ fetch(urlCSVModulos)
 
         data.forEach(columnas => {
           const nombre = columnas[1]?.trim();
-          const tipo = columnas[2]?.trim();
+          const tipo = columnas[2]?.trim() || "Sin Categoría";
           const direccion = columnas[3]?.trim();
           const lat = parseFloat(columnas[4]);
           const lng = parseFloat(columnas[5]);
@@ -309,7 +313,12 @@ fetch(urlCSVModulos)
           const estado = columnas[15]?.trim() || "Regular";
 
           if (!isNaN(lat) && !isNaN(lng)) {
-            conteoEstados["Módulos Deportivos"][estado]++;
+            // Crear grupo si no existe
+            if (!gruposPorTipoCD[tipo]) {
+              gruposPorTipoCD[tipo] = L.layerGroup([], { pane: 'capasPuntosPane' });
+              gruposPorTipoCD[tipo].marcadoresInfo = []; // Almacenar info temporal
+            }
+
             const icono = iconoModulos;
 
             let popup = `<b>${nombre}</b><br>`;
@@ -333,70 +342,174 @@ fetch(urlCSVModulos)
               pane: 'capasPuntosPane'
             }).bindPopup(popup);
 
-            gruposPorEstado2[estado].addLayer(marker);
+            gruposPorTipoCD[tipo].addLayer(marker);
 
-            if (typeof registrarElementoBuscable === "function") {
-              registrarElementoBuscable({
-                nombre: nombre,
-                capa: "Módulos Deportivos",
-                marker: marker
-              });
+            // Extraer actividades de actGratis y actCosto
+            const actividades = [];
+            if (actGratis) {
+              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              actividades.push(...actividadesGratis);
             }
+            if (actCosto) {
+              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              actividades.push(...actividadesCosto);
+            }
+
+            // Guardar info temporal para registro posterior
+            gruposPorTipoCD[tipo].marcadoresInfo.push({
+              nombre: nombre,
+              marker: marker,
+              actividades: actividades
+            });
           }
         });
 
-        // 🧩 Panel lateral simplificado
-        const grupoCompletoMD = L.layerGroup([], { pane: 'capasPuntosPane' });
-        ["Bueno", "Regular", "Malo"].forEach(estado => {
-            gruposPorEstado2[estado].eachLayer(layer => grupoCompletoMD.addLayer(layer));
+        // 🧩 Crear grupo desplegable para Centros Deportivos
+        const grupoCD = document.createElement("li");
+        grupoCD.style.marginBottom = "10px";
+        grupoCD.style.listStyle = "none";
+
+        // Contenedor para la cabecera del grupo
+        const headerCD = document.createElement("div");
+        headerCD.style.display = "flex";
+        headerCD.style.alignItems = "center";
+        headerCD.style.marginBottom = "5px";
+
+        // Icono desplegable
+        const iconoToggleCD = document.createElement("span");
+        iconoToggleCD.innerHTML = "▶";
+        iconoToggleCD.style.cursor = "pointer";
+        iconoToggleCD.style.marginRight = "8px";
+        iconoToggleCD.style.fontSize = "12px";
+        iconoToggleCD.style.transition = "transform 0.3s ease";
+        iconoToggleCD.style.display = "inline-block";
+        iconoToggleCD.style.width = "15px";
+        iconoToggleCD.style.flexShrink = "0";
+
+        // Checkbox principal del grupo
+        const checkboxGrupoCD = document.createElement("input");
+        checkboxGrupoCD.type = "checkbox";
+        checkboxGrupoCD.id = "checkboxCentrosDeportivos";
+        checkboxGrupoCD.style.marginRight = "8px";
+        checkboxGrupoCD.style.flexShrink = "0";
+
+        // Calcular total
+        let totalCD = 0;
+        Object.keys(gruposPorTipoCD).forEach(tipo => {
+          totalCD += gruposPorTipoCD[tipo].getLayers().length;
         });
 
-        const totalMD = conteoEstados["Módulos Deportivos"].Bueno + 
-                        conteoEstados["Módulos Deportivos"].Regular + 
-                        conteoEstados["Módulos Deportivos"].Malo;
-
         // Registrar en el contador global
-        window.contadorInfraestructuras.desglose["Módulos Deportivos"] = totalMD;
-        window.contadorInfraestructuras.total += totalMD;
+        window.contadorInfraestructuras.desglose["Centros Deportivos"] = totalCD;
+        window.contadorInfraestructuras.total += totalCD;
         if (typeof window.actualizarContadorInfraestructuras === 'function') {
             window.actualizarContadorInfraestructuras();
         }
 
-        const itemCapa = document.createElement("li");
-        itemCapa.style.marginBottom = "10px";
-        itemCapa.style.fontSize = "13px";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.checked = false;
-        checkbox.id = "checkboxMD";
-
-        checkbox.addEventListener("change", function () {
-            if (checkbox.checked) {
-                grupoCompletoMD.addTo(map);
-            } else {
-                map.removeLayer(grupoCompletoMD);
-            }
-        });
-
-        const label = document.createElement("label");
-        label.htmlFor = "checkboxMD";
-        label.style.marginLeft = "6px";
-        label.style.cursor = "pointer";
-        label.innerHTML = `
-          <span style="color: #555;">(${totalMD})</span>
+        const labelGrupoCD = document.createElement("label");
+        labelGrupoCD.htmlFor = "checkboxCentrosDeportivos";
+        labelGrupoCD.style.cursor = "pointer";
+        labelGrupoCD.style.flex = "1";
+        labelGrupoCD.style.fontSize = "13px";
+        labelGrupoCD.innerHTML = `
+          <span style="color: #555;">(${totalCD})</span>
           <img src="img/icono/modulos.png" width="20" style="vertical-align: middle; margin-left: 5px; margin-right: 8px;">
-          Módulos Deportivos
+          Centros Deportivos
         `;
 
-        itemCapa.appendChild(checkbox);
-        itemCapa.appendChild(label);
-        listaCapasInfraestructura.appendChild(itemCapa);
-        checkboxesInfraestructura.push(checkbox);
+        // Lista de tipos (sublista)
+        const listaTiposCD = document.createElement("ul");
+        listaTiposCD.style.marginLeft = "25px";
+        listaTiposCD.style.marginTop = "5px";
+        listaTiposCD.style.display = "none";
+        listaTiposCD.style.listStyle = "none";
+        listaTiposCD.style.paddingLeft = "0";
+
+        // Variable para controlar el estado desplegado
+        let isExpandedCD = false;
+
+        // Toggle del grupo
+        iconoToggleCD.addEventListener("click", function() {
+          isExpandedCD = !isExpandedCD;
+          listaTiposCD.style.display = isExpandedCD ? "block" : "none";
+          iconoToggleCD.style.transform = isExpandedCD ? "rotate(90deg)" : "rotate(0deg)";
+        });
+
+        labelGrupoCD.addEventListener("click", function(e) {
+          if (e.target === labelGrupoCD || e.target.tagName !== 'INPUT') {
+            iconoToggleCD.click();
+          }
+        });
+
+        // Checkbox principal para activar/desactivar todos los tipos
+        const checkboxesTiposCD = [];
+        checkboxGrupoCD.addEventListener("change", function () {
+          checkboxesTiposCD.forEach(cb => {
+            if (cb.checked !== checkboxGrupoCD.checked) {
+              cb.click();
+            }
+          });
+        });
+
+        // Crear un item por cada tipo
+        Object.keys(gruposPorTipoCD).sort().forEach(tipo => {
+          const itemTipo = document.createElement("li");
+          itemTipo.style.marginBottom = "8px";
+          itemTipo.style.fontSize = "13px";
+
+          const checkboxTipo = document.createElement("input");
+          checkboxTipo.type = "checkbox";
+          checkboxTipo.checked = false;
+          checkboxTipo.id = `checkboxCD_${tipo.replace(/\s+/g, '_')}`;
+
+          checkboxTipo.addEventListener("change", function () {
+            if (checkboxTipo.checked) {
+              gruposPorTipoCD[tipo].addTo(map);
+            } else {
+              map.removeLayer(gruposPorTipoCD[tipo]);
+            }
+          });
+
+          const labelTipo = document.createElement("label");
+          labelTipo.htmlFor = checkboxTipo.id;
+          labelTipo.style.marginLeft = "6px";
+          labelTipo.style.cursor = "pointer";
+          const cantidadTipo = gruposPorTipoCD[tipo].getLayers().length;
+          labelTipo.innerHTML = `<span style="color: #555;">(${cantidadTipo})</span> ${tipo}`;
+
+          itemTipo.appendChild(checkboxTipo);
+          itemTipo.appendChild(labelTipo);
+          listaTiposCD.appendChild(itemTipo);
+          
+          checkboxesTiposCD.push(checkboxTipo);
+          checkboxesInfraestructura.push(checkboxTipo);
+
+          // Registrar elementos buscables con el checkboxId
+          if (gruposPorTipoCD[tipo].marcadoresInfo && typeof registrarElementoBuscable === "function") {
+            gruposPorTipoCD[tipo].marcadoresInfo.forEach(info => {
+              registrarElementoBuscable({
+                nombre: info.nombre,
+                capa: "Centros Deportivos",
+                marker: info.marker,
+                checkboxId: checkboxTipo.id,
+                actividades: info.actividades
+              });
+            });
+          }
+        });
+
+        // Ensamblar el grupo
+        headerCD.appendChild(iconoToggleCD);
+        headerCD.appendChild(checkboxGrupoCD);
+        headerCD.appendChild(labelGrupoCD);
+        grupoCD.appendChild(headerCD);
+        grupoCD.appendChild(listaTiposCD);
+        listaCapasInfraestructura.appendChild(grupoCD);
+        checkboxesInfraestructura.push(checkboxGrupoCD);
       }
     });
   })
-  .catch(error => console.error("Error al cargar Módulos Deportivos:", error));
+  .catch(error => console.error("Error al cargar Centros Deportivos:", error));
 
 
 
@@ -404,7 +517,7 @@ fetch(urlCSVModulos)
 const urlCSVCACI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRPKQMLclLqV4Lw_2bNoO9SMSBjTQk7UjCvVlGnNdJadNlzMU7L1gal5oMzpkHYeQ/pub?output=csv";
 
 // Icono único para CACI
-const iconoCACI = L.icon({ iconUrl: "img/icono/CACI.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20] });
+const iconoCACI = L.icon({ iconUrl: "img/icono/CACI.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20], className: 'icono-infraestructura' });
 
 // 🔢 Conteo por estado
 const conteoEstadosCACI = {
@@ -472,11 +585,24 @@ fetch(urlCSVCACI)
 
             gruposPorEstadoCACI[estado].addLayer(marker);
 
+            // Extraer actividades de actGratis y actCosto
+            const actividadesCACI = [];
+            if (actGratis) {
+              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCACI.push(...actividadesGratis);
+            }
+            if (actCosto) {
+              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCACI.push(...actividadesCosto);
+            }
+
             if (typeof registrarElementoBuscable === "function") {
               registrarElementoBuscable({
                 nombre: name,
                 capa: "CACI",
-                marker: marker
+                marker: marker,
+                checkboxId: "checkboxCACI",
+                actividades: actividadesCACI
               });
             }
           }
@@ -536,22 +662,15 @@ fetch(urlCSVCACI)
   .catch(error => console.error("Error al cargar CACI:", error));
 
 
-//Centros Culturales
+//Centros Culturales (agrupados por Tipo)
 
 const urlCSVCC = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHG661z-t8oJTl_ETTnRc9cKU5AAeCZKl2yUNkwgdFSqXmZzXughhU7ImB-dvnkQ/pub?output=csv";
 
 // Icono único para Centros Culturales
-const iconoCC = L.icon({ iconUrl: "img/icono/CC.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20] });
+const iconoCC = L.icon({ iconUrl: "img/icono/CC.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20], className: 'icono-infraestructura' });
 
-const conteoEstadosCC = {
-  "Centros Culturales": { Bueno: 0, Regular: 0, Malo: 0 }
-};
-
-const gruposPorEstadoCC = {
-  "Bueno": L.layerGroup([], { pane: 'capasPuntosPane' }),
-  "Regular": L.layerGroup([], { pane: 'capasPuntosPane' }),
-  "Malo": L.layerGroup([], { pane: 'capasPuntosPane' })
-};
+// 🗂️ Agrupación por Tipo
+const gruposPorTipoCC = {};
 
 fetch(urlCSVCC)
   .then(response => response.text())
@@ -564,7 +683,7 @@ fetch(urlCSVCC)
 
         data.forEach(columnas => {
           const nombre = columnas[1]?.trim();
-          const tipo = columnas[2]?.trim();
+          const tipo = columnas[2]?.trim() || "Sin Categoría";
           const direccion = columnas[3]?.trim();
           const lat = parseFloat(columnas[4]);
           const lng = parseFloat(columnas[5]);
@@ -577,7 +696,11 @@ fetch(urlCSVCC)
           const estado = columnas[12]?.trim() || "Regular";
 
           if (!isNaN(lat) && !isNaN(lng)) {
-            conteoEstadosCC["Centros Culturales"][estado]++;
+            // Crear grupo si no existe
+            if (!gruposPorTipoCC[tipo]) {
+              gruposPorTipoCC[tipo] = L.layerGroup([], { pane: 'capasPuntosPane' });
+            }
+
             const icono = iconoCC;
 
             let popup = `<b>${nombre}</b><br>`;
@@ -603,27 +726,65 @@ fetch(urlCSVCC)
               pane: 'capasPuntosPane'
             }).bindPopup(popup);
 
-            gruposPorEstadoCC[estado].addLayer(marker);
+            gruposPorTipoCC[tipo].addLayer(marker);
+
+            // Extraer actividades de actGratis y actCosto
+            const actividadesCC = [];
+            if (actGratis) {
+              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCC.push(...actividadesGratis);
+            }
+            if (actCosto) {
+              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCC.push(...actividadesCosto);
+            }
 
             if (typeof registrarElementoBuscable === "function") {
               registrarElementoBuscable({
                 nombre: nombre,
                 capa: "Centros Culturales",
-                marker: marker
+                marker: marker,
+                checkboxId: `checkboxCC_${tipo.replace(/\s+/g, '_')}`,
+                actividades: actividadesCC
               });
             }
           }
         });
 
-        // 🎛️ Panel lateral simplificado
-        const grupoCompletoCC = L.layerGroup([], { pane: 'capasPuntosPane' });
-        ["Bueno", "Regular", "Malo"].forEach(estado => {
-            gruposPorEstadoCC[estado].eachLayer(layer => grupoCompletoCC.addLayer(layer));
-        });
+        // 🧩 Crear grupo desplegable para Centros Culturales
+        const grupoCC = document.createElement("li");
+        grupoCC.style.marginBottom = "10px";
+        grupoCC.style.listStyle = "none";
 
-        const totalCC = conteoEstadosCC["Centros Culturales"].Bueno + 
-                        conteoEstadosCC["Centros Culturales"].Regular + 
-                        conteoEstadosCC["Centros Culturales"].Malo;
+        // Contenedor para la cabecera del grupo
+        const headerCC = document.createElement("div");
+        headerCC.style.display = "flex";
+        headerCC.style.alignItems = "center";
+        headerCC.style.marginBottom = "5px";
+
+        // Icono desplegable
+        const iconoToggleCC = document.createElement("span");
+        iconoToggleCC.innerHTML = "▶";
+        iconoToggleCC.style.cursor = "pointer";
+        iconoToggleCC.style.marginRight = "8px";
+        iconoToggleCC.style.fontSize = "12px";
+        iconoToggleCC.style.transition = "transform 0.3s ease";
+        iconoToggleCC.style.display = "inline-block";
+        iconoToggleCC.style.width = "15px";
+        iconoToggleCC.style.flexShrink = "0";
+
+        // Checkbox principal del grupo
+        const checkboxGrupoCC = document.createElement("input");
+        checkboxGrupoCC.type = "checkbox";
+        checkboxGrupoCC.id = "checkboxCentrosCulturales";
+        checkboxGrupoCC.style.marginRight = "8px";
+        checkboxGrupoCC.style.flexShrink = "0";
+
+        // Calcular total
+        let totalCC = 0;
+        Object.keys(gruposPorTipoCC).forEach(tipo => {
+          totalCC += gruposPorTipoCC[tipo].getLayers().length;
+        });
 
         // Registrar en el contador global
         window.contadorInfraestructuras.desglose["Centros Culturales"] = totalCC;
@@ -632,37 +793,93 @@ fetch(urlCSVCC)
             window.actualizarContadorInfraestructuras();
         }
 
-        const itemCapa = document.createElement("li");
-        itemCapa.style.marginBottom = "10px";
-        itemCapa.style.fontSize = "13px";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.checked = false;
-        checkbox.id = "checkboxCC";
-
-        checkbox.addEventListener("change", function () {
-            if (checkbox.checked) {
-                grupoCompletoCC.addTo(map);
-            } else {
-                map.removeLayer(grupoCompletoCC);
-            }
-        });
-
-        const label = document.createElement("label");
-        label.htmlFor = "checkboxCC";
-        label.style.marginLeft = "6px";
-        label.style.cursor = "pointer";
-        label.innerHTML = `
+        const labelGrupoCC = document.createElement("label");
+        labelGrupoCC.htmlFor = "checkboxCentrosCulturales";
+        labelGrupoCC.style.cursor = "pointer";
+        labelGrupoCC.style.flex = "1";
+        labelGrupoCC.style.fontSize = "13px";
+        labelGrupoCC.innerHTML = `
           <span style="color: #555;">(${totalCC})</span>
           <img src="img/icono/CC.png" width="25" style="vertical-align: middle; margin-left: 5px; margin-right: 8px;">
           Centros Culturales
         `;
 
-        itemCapa.appendChild(checkbox);
-        itemCapa.appendChild(label);
-        listaCapasInfraestructura.appendChild(itemCapa);
-        checkboxesInfraestructura.push(checkbox);
+        // Lista de tipos (sublista)
+        const listaTiposCC = document.createElement("ul");
+        listaTiposCC.style.marginLeft = "25px";
+        listaTiposCC.style.marginTop = "5px";
+        listaTiposCC.style.display = "none";
+        listaTiposCC.style.listStyle = "none";
+        listaTiposCC.style.paddingLeft = "0";
+
+        // Variable para controlar el estado desplegado
+        let isExpandedCC = false;
+
+        // Toggle del grupo
+        iconoToggleCC.addEventListener("click", function() {
+          isExpandedCC = !isExpandedCC;
+          listaTiposCC.style.display = isExpandedCC ? "block" : "none";
+          iconoToggleCC.style.transform = isExpandedCC ? "rotate(90deg)" : "rotate(0deg)";
+        });
+
+        labelGrupoCC.addEventListener("click", function(e) {
+          if (e.target === labelGrupoCC || e.target.tagName !== 'INPUT') {
+            iconoToggleCC.click();
+          }
+        });
+
+        // Checkbox principal para activar/desactivar todos los tipos
+        const checkboxesTiposCC = [];
+        checkboxGrupoCC.addEventListener("change", function () {
+          checkboxesTiposCC.forEach(cb => {
+            if (cb.checked !== checkboxGrupoCC.checked) {
+              cb.click();
+            }
+          });
+        });
+
+        // Crear un item por cada tipo
+        Object.keys(gruposPorTipoCC).sort().forEach(tipo => {
+          const itemTipo = document.createElement("li");
+          itemTipo.style.marginBottom = "8px";
+          itemTipo.style.fontSize = "13px";
+
+          const checkboxTipo = document.createElement("input");
+          checkboxTipo.type = "checkbox";
+          checkboxTipo.checked = false;
+          checkboxTipo.id = `checkboxCC_${tipo.replace(/\s+/g, '_')}`;
+
+          checkboxTipo.addEventListener("change", function () {
+            if (checkboxTipo.checked) {
+              gruposPorTipoCC[tipo].addTo(map);
+            } else {
+              map.removeLayer(gruposPorTipoCC[tipo]);
+            }
+          });
+
+          const labelTipo = document.createElement("label");
+          labelTipo.htmlFor = checkboxTipo.id;
+          labelTipo.style.marginLeft = "6px";
+          labelTipo.style.cursor = "pointer";
+          const cantidadTipo = gruposPorTipoCC[tipo].getLayers().length;
+          labelTipo.innerHTML = `<span style="color: #555;">(${cantidadTipo})</span> ${tipo}`;
+
+          itemTipo.appendChild(checkboxTipo);
+          itemTipo.appendChild(labelTipo);
+          listaTiposCC.appendChild(itemTipo);
+          
+          checkboxesTiposCC.push(checkboxTipo);
+          checkboxesInfraestructura.push(checkboxTipo);
+        });
+
+        // Ensamblar el grupo
+        headerCC.appendChild(iconoToggleCC);
+        headerCC.appendChild(checkboxGrupoCC);
+        headerCC.appendChild(labelGrupoCC);
+        grupoCC.appendChild(headerCC);
+        grupoCC.appendChild(listaTiposCC);
+        listaCapasInfraestructura.appendChild(grupoCC);
+        checkboxesInfraestructura.push(checkboxGrupoCC);
       }
     });
   })
@@ -673,7 +890,7 @@ fetch(urlCSVCC)
 const urlCSV_CI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSESYWPbYWjhESKJclNKWd0gqEKw5PdFlHaY0NpDzg11inxf27cR_Y2jTiAS_6_2Q/pub?output=csv";
 
 // Icono único para Centros Interactivos
-const iconoCI = L.icon({ iconUrl: "img/icono/CI.png", iconSize: [20, 20], iconAnchor: [15, 20], popupAnchor: [0, -20] });
+const iconoCI = L.icon({ iconUrl: "img/icono/CI.png", iconSize: [20, 20], iconAnchor: [15, 20], popupAnchor: [0, -20], className: 'icono-infraestructura' });
 
 const conteoEstadosCI = {
   "Centros Interactivos": { Bueno: 0, Regular: 0, Malo: 0 }
@@ -737,11 +954,24 @@ fetch(urlCSV_CI)
 
             gruposPorEstadoCI[estado].addLayer(marker);
 
+            // Extraer actividades de actGratis y actCosto
+            const actividadesCI = [];
+            if (actGratis) {
+              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCI.push(...actividadesGratis);
+            }
+            if (actCosto) {
+              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCI.push(...actividadesCosto);
+            }
+
             if (typeof registrarElementoBuscable === "function") {
               registrarElementoBuscable({
                 nombre: nombre,
                 capa: "Centros Interactivos",
-                marker: marker
+                marker: marker,
+                checkboxId: "checkboxCI",
+                actividades: actividadesCI
               });
             }
           }
@@ -805,7 +1035,7 @@ fetch(urlCSV_CI)
 const urlCSV_CAM = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5IFXp46_S-RTabO95mZuiiJTWToudyW71SCZIeu1GGfwcsNEJ04OEU2DMc8Jw5Q/pub?output=csv";
 
 // Icono único para Casas del Adulto Mayor
-const iconoCAM = L.icon({ iconUrl: "img/icono/CAM.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20] });
+const iconoCAM = L.icon({ iconUrl: "img/icono/CAM.png", iconSize: [30, 30], iconAnchor: [15, 20], popupAnchor: [0, -20], className: 'icono-infraestructura' });
 
 const conteoEstadosCAM = {
   "Casas del Adulto Mayor": { Bueno: 0, Regular: 0, Malo: 0 }
@@ -869,11 +1099,24 @@ fetch(urlCSV_CAM)
 
             gruposPorEstadoCAM[estado].addLayer(marker);
 
+            // Extraer actividades de actGratis y actCosto
+            const actividadesCAM = [];
+            if (actGratis) {
+              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCAM.push(...actividadesGratis);
+            }
+            if (actCosto) {
+              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCAM.push(...actividadesCosto);
+            }
+
             if (typeof registrarElementoBuscable === "function") {
               registrarElementoBuscable({
                 nombre: nombre,
                 capa: "Casas del Adulto Mayor",
-                marker: marker
+                marker: marker,
+                checkboxId: "checkboxCAM",
+                actividades: actividadesCAM
               });
             }
           }
@@ -936,7 +1179,7 @@ fetch(urlCSV_CAM)
 const urlCSV_CAO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vROHBchPW4nHQ6PN9Ivf1I0XR6OMvOpSUYLmUV4dxgpQoPDOfh_sCrbiA9csekUmg/pub?output=csv";
 
 // Icono único para Centros de Artes y Oficios
-const iconoCAO = L.icon({ iconUrl: "img/icono/CAO.png", iconSize: [20, 20], iconAnchor: [15, 20], popupAnchor: [0, -20] });
+const iconoCAO = L.icon({ iconUrl: "img/icono/CAO.png", iconSize: [20, 20], iconAnchor: [15, 20], popupAnchor: [0, -20], className: 'icono-infraestructura' });
 
 const conteoEstadosCAO = {
   "Centros de Artes y Oficios": { Bueno: 0, Regular: 0, Malo: 0 }
@@ -1000,11 +1243,24 @@ fetch(urlCSV_CAO)
 
             gruposPorEstadoCAO[estado].addLayer(marker);
 
+            // Extraer actividades de actGratis y actCosto
+            const actividadesCAO = [];
+            if (actGratis) {
+              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCAO.push(...actividadesGratis);
+            }
+            if (actCosto) {
+              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              actividadesCAO.push(...actividadesCosto);
+            }
+
             if (typeof registrarElementoBuscable === "function") {
               registrarElementoBuscable({
                 nombre: nombre,
                 capa: "Centros de Artes y Oficios",
-                marker: marker
+                marker: marker,
+                checkboxId: "checkboxCAO",
+                actividades: actividadesCAO
               });
             }
           }
@@ -1062,6 +1318,241 @@ fetch(urlCSV_CAO)
     });
   })
   .catch(error => console.error("Error al cargar Centros de Artes y Oficios:", error));
+
+// Capa: Centros de Salud (agrupados por Tipo)
+const urlCSVSalud = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSS1pz7uZdAZ42MhetaNZFgl43XBe8hhiL5JQdaN1kFkeIUrCM2IrDYbZlihyLCMA/pub?output=csv";
+
+// 🗂️ Agrupación por Tipo
+const gruposPorTipoSalud = {};
+
+fetch(urlCSVSalud)
+  .then(response => response.text())
+  .then(csvText => {
+    Papa.parse(csvText, {
+      header: false,
+      skipEmptyLines: true,
+      complete: function (results) {
+        const data = results.data.slice(1);
+
+        data.forEach(columnas => {
+          const nombre = columnas[1]?.trim();
+          const tipo = columnas[2]?.trim() || "Sin Categoría";
+          const direccion = columnas[3]?.trim();
+          const lat = parseFloat(columnas[4]);
+          const lng = parseFloat(columnas[5]);
+          const linkGoogle = columnas[6]?.trim();
+          const contacto = columnas[7]?.trim();
+          const servicios = columnas[8]?.trim();
+          const horarios = columnas[9]?.trim();
+          const observaciones = columnas[10]?.trim();
+          const linkFoto = columnas[11]?.trim();
+
+          if (!isNaN(lat) && !isNaN(lng)) {
+            // Crear grupo si no existe
+            if (!gruposPorTipoSalud[tipo]) {
+              gruposPorTipoSalud[tipo] = L.layerGroup([], { pane: 'capasPuntosPane' });
+            }
+
+            // Definir icono según el tipo
+            let icono;
+            if (tipo.toLowerCase().includes('humana') || tipo.toLowerCase().includes('humano')) {
+              icono = L.divIcon({
+                html: '<div style="font-size: 26px; line-height: 1;">🩺</div>',
+                className: 'emoji-icon',
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+                popupAnchor: [0, -13]
+              });
+            } else if (tipo.toLowerCase().includes('veterinari')) {
+              icono = L.divIcon({
+                html: '<div style="font-size: 26px; line-height: 1;">🐶</div>',
+                className: 'emoji-icon',
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+                popupAnchor: [0, -13]
+              });
+            } else {
+              icono = L.divIcon({
+                html: '<div style="font-size: 26px; line-height: 1;">🏥</div>',
+                className: 'emoji-icon',
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+                popupAnchor: [0, -13]
+              });
+            }
+
+            let popup = `<b>${nombre}</b><br>`;
+            if (tipo) popup += `<b>Tipo:</b> ${tipo}<br>`;
+            if (direccion) popup += `<b>Dirección:</b> ${direccion}<br>`;
+            if (linkGoogle) {
+              const urlSegura = encodeURI(linkGoogle.replace(/^"+|"+$/g, "").trim());
+              popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
+            }
+            if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
+            if (servicios) popup += `<b>Servicios:</b> ${servicios}<br>`;
+            if (horarios) popup += `<b>Horarios:</b> ${horarios}<br>`;
+            if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
+            if (linkFoto) popup += `<b>Foto:</b> <a href="${linkFoto}" target="_blank">Ver imagen</a><br>`;
+
+            const marker = L.marker([lat, lng], {
+              icon: icono,
+              pane: 'capasPuntosPane'
+            }).bindPopup(popup);
+
+            gruposPorTipoSalud[tipo].addLayer(marker);
+
+            // Extraer servicios como actividades buscables
+            const actividadesSalud = [];
+            if (servicios) {
+              const serviciosArray = servicios.split(',').map(s => s.trim()).filter(s => s);
+              actividadesSalud.push(...serviciosArray);
+            }
+
+            if (typeof registrarElementoBuscable === "function") {
+              registrarElementoBuscable({
+                nombre: nombre,
+                capa: "Centros de Salud",
+                marker: marker,
+                checkboxId: `checkboxSalud_${tipo.replace(/\s+/g, '_')}`,
+                actividades: actividadesSalud
+              });
+            }
+          }
+        });
+
+        // 🧩 Crear grupo desplegable para Centros de Salud
+        const grupoSalud = document.createElement("li");
+        grupoSalud.style.marginBottom = "10px";
+        grupoSalud.style.listStyle = "none";
+
+        // Contenedor para la cabecera del grupo
+        const headerSalud = document.createElement("div");
+        headerSalud.style.display = "flex";
+        headerSalud.style.alignItems = "center";
+        headerSalud.style.marginBottom = "5px";
+
+        // Icono desplegable
+        const iconoToggleSalud = document.createElement("span");
+        iconoToggleSalud.innerHTML = "▶";
+        iconoToggleSalud.style.cursor = "pointer";
+        iconoToggleSalud.style.marginRight = "8px";
+        iconoToggleSalud.style.fontSize = "12px";
+        iconoToggleSalud.style.transition = "transform 0.3s ease";
+        iconoToggleSalud.style.display = "inline-block";
+        iconoToggleSalud.style.width = "15px";
+        iconoToggleSalud.style.flexShrink = "0";
+
+        // Checkbox principal del grupo
+        const checkboxGrupoSalud = document.createElement("input");
+        checkboxGrupoSalud.type = "checkbox";
+        checkboxGrupoSalud.id = "checkboxCentrosSalud";
+        checkboxGrupoSalud.style.marginRight = "8px";
+        checkboxGrupoSalud.style.flexShrink = "0";
+
+        // Calcular total
+        let totalSalud = 0;
+        Object.keys(gruposPorTipoSalud).forEach(tipo => {
+          totalSalud += gruposPorTipoSalud[tipo].getLayers().length;
+        });
+
+        // Registrar en el contador global
+        window.contadorInfraestructuras.desglose["Centros de Salud"] = totalSalud;
+        window.contadorInfraestructuras.total += totalSalud;
+        if (typeof window.actualizarContadorInfraestructuras === 'function') {
+            window.actualizarContadorInfraestructuras();
+        }
+
+        const labelGrupoSalud = document.createElement("label");
+        labelGrupoSalud.htmlFor = "checkboxCentrosSalud";
+        labelGrupoSalud.style.cursor = "pointer";
+        labelGrupoSalud.style.flex = "1";
+        labelGrupoSalud.style.fontSize = "13px";
+        labelGrupoSalud.innerHTML = `
+          <span style="color: #555;">(${totalSalud})</span>
+          <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🩺</span>
+          Centros de Salud
+        `;
+
+        // Lista de tipos (sublista)
+        const listaTiposSalud = document.createElement("ul");
+        listaTiposSalud.style.marginLeft = "25px";
+        listaTiposSalud.style.marginTop = "5px";
+        listaTiposSalud.style.display = "none";
+        listaTiposSalud.style.listStyle = "none";
+        listaTiposSalud.style.paddingLeft = "0";
+
+        // Variable para controlar el estado desplegado
+        let isExpandedSalud = false;
+
+        // Toggle del grupo
+        iconoToggleSalud.addEventListener("click", function() {
+          isExpandedSalud = !isExpandedSalud;
+          listaTiposSalud.style.display = isExpandedSalud ? "block" : "none";
+          iconoToggleSalud.style.transform = isExpandedSalud ? "rotate(90deg)" : "rotate(0deg)";
+        });
+
+        labelGrupoSalud.addEventListener("click", function(e) {
+          if (e.target === labelGrupoSalud || e.target.tagName !== 'INPUT') {
+            iconoToggleSalud.click();
+          }
+        });
+
+        // Checkbox principal para activar/desactivar todos los tipos
+        const checkboxesTiposSalud = [];
+        checkboxGrupoSalud.addEventListener("change", function () {
+          checkboxesTiposSalud.forEach(cb => {
+            if (cb.checked !== checkboxGrupoSalud.checked) {
+              cb.click();
+            }
+          });
+        });
+
+        // Crear un item por cada tipo
+        Object.keys(gruposPorTipoSalud).sort().forEach(tipo => {
+          const itemTipo = document.createElement("li");
+          itemTipo.style.marginBottom = "8px";
+          itemTipo.style.fontSize = "13px";
+
+          const checkboxTipo = document.createElement("input");
+          checkboxTipo.type = "checkbox";
+          checkboxTipo.checked = false;
+          checkboxTipo.id = `checkboxSalud_${tipo.replace(/\s+/g, '_')}`;
+
+          checkboxTipo.addEventListener("change", function () {
+            if (checkboxTipo.checked) {
+              gruposPorTipoSalud[tipo].addTo(map);
+            } else {
+              map.removeLayer(gruposPorTipoSalud[tipo]);
+            }
+          });
+
+          const labelTipo = document.createElement("label");
+          labelTipo.htmlFor = checkboxTipo.id;
+          labelTipo.style.marginLeft = "6px";
+          labelTipo.style.cursor = "pointer";
+          const cantidadTipo = gruposPorTipoSalud[tipo].getLayers().length;
+          labelTipo.innerHTML = `<span style="color: #555;">(${cantidadTipo})</span> ${tipo}`;
+
+          itemTipo.appendChild(checkboxTipo);
+          itemTipo.appendChild(labelTipo);
+          listaTiposSalud.appendChild(itemTipo);
+          
+          checkboxesTiposSalud.push(checkboxTipo);
+          checkboxesInfraestructura.push(checkboxTipo);
+        });
+
+        // Ensamblar el grupo
+        headerSalud.appendChild(iconoToggleSalud);
+        headerSalud.appendChild(checkboxGrupoSalud);
+        headerSalud.appendChild(labelGrupoSalud);
+        grupoSalud.appendChild(headerSalud);
+        grupoSalud.appendChild(listaTiposSalud);
+        listaCapasInfraestructura.appendChild(grupoSalud);
+        checkboxesInfraestructura.push(checkboxGrupoSalud);
+      }
+    });
+  })
+  .catch(error => console.error("Error al cargar Centros de Salud:", error));
 
 // ============================================================================
 // 🏢 GRUPO: EQUIPAMIENTOS URBANOS
@@ -1194,7 +1685,8 @@ fetch("archivos/vectores/hospitales.geojson")
         registrarElementoBuscable({
           nombre: props.nom_estab || 'Hospital',
           capa: "Hospitales",
-          marker: marker
+          marker: marker,
+          checkboxId: "checkboxHospitales"
         });
       }
     });
@@ -1268,7 +1760,8 @@ fetch("archivos/vectores/mercados.geojson")
         registrarElementoBuscable({
           nombre: props.Name || 'Mercado',
           capa: "Mercados",
-          marker: marker
+          marker: marker,
+          checkboxId: "checkboxMercados"
         });
       }
     });
@@ -1341,7 +1834,8 @@ fetch("archivos/vectores/parques.geojson")
         registrarElementoBuscable({
           nombre: props.Name || 'Parque',
           capa: "Parques",
-          marker: marker
+          marker: marker,
+          checkboxId: "checkboxParques"
         });
       }
     });
@@ -1415,7 +1909,8 @@ fetch("archivos/vectores/pilares.geojson")
         registrarElementoBuscable({
           nombre: props.Name || 'PILAR',
           capa: "PILARES",
-          marker: marker
+          marker: marker,
+          checkboxId: "checkboxPilares"
         });
       }
     });
@@ -1495,7 +1990,8 @@ fetch("archivos/vectores/preescolar.geojson")
         registrarElementoBuscable({
           nombre: props.NOMBRE || 'Preescolar',
           capa: "Preescolar",
-          marker: marker
+          marker: marker,
+          checkboxId: "checkboxPreescolar"
         });
       }
     });
@@ -1575,7 +2071,8 @@ fetch("archivos/vectores/primarias.geojson")
         registrarElementoBuscable({
           nombre: props.NOMBRE || 'Primaria',
           capa: "Primarias",
-          marker: marker
+          marker: marker,
+          checkboxId: "checkboxPrimarias"
         });
       }
     });
@@ -1655,7 +2152,8 @@ fetch("archivos/vectores/secundarias.geojson")
         registrarElementoBuscable({
           nombre: props.NOMBRE || 'Secundaria',
           capa: "Secundarias",
-          marker: marker
+          marker: marker,
+          checkboxId: "checkboxSecundarias"
         });
       }
     });
@@ -1695,50 +2193,126 @@ fetch("archivos/vectores/secundarias.geojson")
   })
   .catch(error => console.error("Error al cargar Secundarias:", error));
 
-});
-
 // ============================================================================
 // 🎯 CAPA: CENTROS DE ATENCIÓN MÚLTIPLE (CAM)
 // ============================================================================
-document.addEventListener("DOMContentLoaded", function() {
-  fetch("archivos/vectores/cam.geojson")
-    .then(response => response.json())
-    .then(data => {
-      const iconoCAM = L.divIcon({
-        html: '<div style="font-size: 26px; line-height: 1;">&#129665;</div>',
-        className: 'emoji-icon',
-        iconSize: [26, 26],
-        iconAnchor: [13, 13],
-        popupAnchor: [0, -13]
+fetch("archivos/vectores/cam.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoCAM = L.divIcon({
+      html: '<div style="font-size: 26px; line-height: 1;">&#129665;</div>',
+      className: 'emoji-icon',
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      popupAnchor: [0, -13]
+    });
+
+    const grupoCAM = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.NOMBRE || 'CAM'}</b><br>`;
+      if (props.NIVEL) popup += `<b>Nivel:</b> ${props.NIVEL}<br>`;
+      if (props.DOMICILIO) popup += `<b>Domicilio:</b> ${props.DOMICILIO}<br>`;
+      if (props.COLONIA) popup += `<b>Colonia:</b> ${props.COLONIA}<br>`;
+      if (props.TURNO) popup += `<b>Turno:</b> ${props.TURNO}<br>`;
+      if (props.TELÉFONO) popup += `<b>Teléfono:</b> ${props.TELÉFONO}<br>`;
+      if (props.MATRÍC) popup += `<b>Matrícula:</b> ${props.MATRÍC} alumnos<br>`;
+      if (props.AULAS) popup += `<b>Aulas:</b> ${props.AULAS}<br>`;
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoCAM,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoCAM.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.NOMBRE || 'CAM',
+          capa: "Centros de Atención Múltiple",
+          marker: marker,
+          checkboxId: "checkboxCAMEducacion"
+        });
+      }
+    });
+
+    // Agregar al panel al final
+    const listaCapasEquipamientos = document.querySelector(".lista-capas-equipamientos");
+    if (listaCapasEquipamientos) {
+      const itemCapa = document.createElement("li");
+      itemCapa.style.marginBottom = "10px";
+      itemCapa.style.fontSize = "13px";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = false;
+      checkbox.id = "checkboxCAMEducacion";
+
+      checkbox.addEventListener("change", function() {
+        if (checkbox.checked) {
+          grupoCAM.addTo(map);
+        } else {
+          map.removeLayer(grupoCAM);
+        }
       });
 
-      const grupoCAM = L.layerGroup([], { pane: 'capasPuntosPane' });
+      const label = document.createElement("label");
+      label.htmlFor = "checkboxCAMEducacion";
+      label.style.marginLeft = "6px";
+      label.style.cursor = "pointer";
+      label.innerHTML = `
+        <span style="color: #555;">(${data.features.length})</span>
+        <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">&#129665;</span>
+        Centros de Atención Múltiple
+      `;
+
+      itemCapa.appendChild(checkbox);
+      itemCapa.appendChild(label);
+      listaCapasEquipamientos.appendChild(itemCapa);
+      checkboxesEquipamientos.push(checkbox);
+    }
+  })
+  .catch(error => console.error("Error al cargar Centros de Atención Múltiple:", error));
+
+// ============================================================================
+// ⛪ CAPA: PARROQUIAS
+// ============================================================================
+fetch("archivos/vectores/parroquias.geojson")
+  .then(response => response.json())
+  .then(data => {
+      const iconoParroquia = L.divIcon({
+      html: '<div style="font-size: 26px; line-height: 1;">🏰</div>',
+      });
+
+      const grupoParroquias = L.layerGroup([], { pane: 'capasPuntosPane' });
 
       data.features.forEach(feature => {
         const props = feature.properties;
         const coords = feature.geometry.coordinates;
 
-        let popup = `<b>${props.NOMBRE || 'CAM'}</b><br>`;
-        if (props.NIVEL) popup += `<b>Nivel:</b> ${props.NIVEL}<br>`;
-        if (props.DOMICILIO) popup += `<b>Domicilio:</b> ${props.DOMICILIO}<br>`;
-        if (props.COLONIA) popup += `<b>Colonia:</b> ${props.COLONIA}<br>`;
-        if (props.TURNO) popup += `<b>Turno:</b> ${props.TURNO}<br>`;
-        if (props.TELÉFONO) popup += `<b>Teléfono:</b> ${props.TELÉFONO}<br>`;
-        if (props.MATRÍC) popup += `<b>Matrícula:</b> ${props.MATRÍC} alumnos<br>`;
-        if (props.AULAS) popup += `<b>Aulas:</b> ${props.AULAS}<br>`;
+        let popup = `<b>${props.Nombre || 'Parroquia'}</b><br>`;
+        if (props['Parroquia/']) popup += `<b>Tipo:</b> ${props['Parroquia/']}<br>`;
+        if (props.Colonia) popup += `<b>Colonia:</b> ${props.Colonia}<br>`;
+        if (props['Padre enca']) popup += `<b>Padre Encargado:</b> ${props['Padre enca']}<br>`;
+        if (props.ZONA) popup += `<b>Zona:</b> ${props.ZONA}<br>`;
+        if (props.Decanato) popup += `<b>Decanato:</b> ${props.Decanato}<br>`;
 
         const marker = L.marker([coords[1], coords[0]], {
-          icon: iconoCAM,
+          icon: iconoParroquia,
           pane: 'capasPuntosPane'
         }).bindPopup(popup);
 
-        grupoCAM.addLayer(marker);
+        grupoParroquias.addLayer(marker);
 
         if (typeof registrarElementoBuscable === "function") {
           registrarElementoBuscable({
-            nombre: props.NOMBRE || 'CAM',
-            capa: "Centros de Atención Múltiple",
-            marker: marker
+            nombre: props.Nombre || 'Parroquia',
+            capa: "Parroquias",
+            marker: marker,
+            checkboxId: "checkboxParroquias"
           });
         }
       });
@@ -1753,30 +2327,32 @@ document.addEventListener("DOMContentLoaded", function() {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = false;
-        checkbox.id = "checkboxCAMEducacion";
+        checkbox.id = "checkboxParroquias";
 
         checkbox.addEventListener("change", function() {
           if (checkbox.checked) {
-            grupoCAM.addTo(map);
+            grupoParroquias.addTo(map);
           } else {
-            map.removeLayer(grupoCAM);
+            map.removeLayer(grupoParroquias);
           }
         });
 
         const label = document.createElement("label");
-        label.htmlFor = "checkboxCAMEducacion";
+        label.htmlFor = "checkboxParroquias";
         label.style.marginLeft = "6px";
         label.style.cursor = "pointer";
         label.innerHTML = `
           <span style="color: #555;">(${data.features.length})</span>
-          <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">&#129665;</span>
-          Centros de Atención Múltiple
+          <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🏰</span>
+          Parroquias
         `;
 
         itemCapa.appendChild(checkbox);
         itemCapa.appendChild(label);
         listaCapasEquipamientos.appendChild(itemCapa);
+        checkboxesEquipamientos.push(checkbox);
       }
     })
-    .catch(error => console.error("Error al cargar Centros de Atención Múltiple:", error));
+    .catch(error => console.error("Error al cargar Parroquias:", error));
+
 });

@@ -40,9 +40,9 @@ if (typeof L === "undefined") {
                   // Crear la capa GeoJSON y asignar estilos
                   window.U_Habitacionales_layer = L.geoJSON(data, {
                       pointToLayer: (feature, latlng) => {
-                          // Icono de edificios para puntos
+                          // Icono de edificio de apartamentos para puntos
                           const iconoEdificio = L.divIcon({
-                              html: '<div style="font-size: 26px; line-height: 1;">🏢</div>',
+                              html: '<div style="font-size: 26px; line-height: 1;">&#127970;</div>',
                               className: 'emoji-icon',
                               iconSize: [26, 26],
                               iconAnchor: [13, 13],
@@ -60,13 +60,19 @@ if (typeof L === "undefined") {
                           };
                       },
                       onEachFeature: (feature, layer) => {
-                          let popupContent = `<h3>${feature.properties?.NOMBRE || "Unidad Habitacional"}</h3>`;
-                          if (feature.properties?.COLONIA) {
-                              popupContent += `<p><strong>Colonia:</strong> ${feature.properties.COLONIA}</p>`;
+                          const props = feature.properties;
+                          let popupContent = `<div style="font-size: 12px;"><h4 style="font-size: 14px; margin-bottom: 8px;">${props?.NOMBRE || "Unidad Habitacional"}</h4>`;
+                          
+                          // Mostrar todos los atributos disponibles excepto ADMINISTRADOR y COPACO
+                          if (props) {
+                              for (let key in props) {
+                                  if (key !== 'NOMBRE' && key !== 'ADMINISTRADOR' && key !== 'COPACO' && props[key]) {
+                                      popupContent += `<p style="margin: 4px 0;"><strong>${key}:</strong> ${props[key]}</p>`;
+                                  }
+                              }
                           }
-                          if (feature.properties?.TIPO) {
-                              popupContent += `<p><strong>Tipo:</strong> ${feature.properties.TIPO}</p>`;
-                          }
+                          
+                          popupContent += `</div>`;
                           layer.bindPopup(popupContent);
 
                           if (L.DomEvent && typeof L.DomEvent.disableClickPropagation === "function") {

@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "bomberos",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Name": "Heroico Cuerpo de Bomberos", "Teléfono": "Teléfono: 5557054233" }, "geometry": { "type": "Point", "coordinates": [ -99.227501573319074, 19.33665523526577, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "ESTACION DE BOMBEROS ISIDORO SOLACHE", "Teléfono": "Teléfono: 5552714616" }, "geometry": { "type": "Point", "coordinates": [ -99.199647874980542, 19.386185091882389, 0.0 ] } }
+]
+}

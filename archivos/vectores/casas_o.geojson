@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "casas_o",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "fid": 1, "Name": "Centro Comunitario La Cebada" }, "geometry": { "type": "Point", "coordinates": [ -99.2336852, 19.3795133, 0.0 ] } },
+{ "type": "Feature", "properties": { "fid": 2, "Name": "Gimnasio de Torres de Potrero" }, "geometry": { "type": "Point", "coordinates": [ -99.2512477, 19.3299818, 0.0 ] } },
+{ "type": "Feature", "properties": { "fid": 3, "Name": "BIBLIOTECA JOSE REVUELTAS" }, "geometry": { "type": "Point", "coordinates": [ -99.2352834, 19.3525541, 0.0 ] } }
+]
+}

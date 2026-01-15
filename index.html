@@ -85,6 +85,38 @@
       </div>
     </div>
 
+    <!-- Modal para mostrar fotos -->
+    <div class="modal fade" id="fotoModal" tabindex="-1" aria-labelledby="fotoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="fotoModalLabel">Galería de Fotografías</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Carrusel de imágenes -->
+            <div id="carouselFotos" class="carousel slide" data-bs-ride="false">
+              <div class="carousel-inner" id="carouselInner">
+                <!-- Las imágenes se cargarán dinámicamente aquí -->
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselFotos" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselFotos" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+              </button>
+            </div>
+            <!-- Contador de imágenes -->
+            <div class="text-center mt-3">
+              <span id="contadorFotos" class="badge bg-secondary"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Contenedor general que abarca panel lateral y mapa -->
     <div class="main-container">
       <!-- Contenedor lateral (panel + botón) -->
@@ -179,7 +211,7 @@
     <!-- Script que maneja la lógica del buscador de colonias -->
     <script src="buscador.js?v=7"></script>
     <!-- Script donde se definen las capas temáticas, info a mostrar e íconos -->
-    <script src="capas.js?v=6"></script>
+    <script src="capas.js?v=8"></script>
     <!-- Script principal que contiene lógica de menú lateral -->
     <script src="script.js?v=2"></script>
 
@@ -280,6 +312,124 @@
           });
         }
       });
+
+      // Función global para abrir el modal de fotos con carrusel o visor de carpeta
+      window.abrirFotoModal = function(urlFotos) {
+        console.log('URL(s) de fotos recibida(s):', urlFotos);
+        
+        // Si no hay URL, no hacer nada
+        if (!urlFotos || urlFotos.trim() === '') {
+          console.warn('No se proporcionaron URLs de fotos');
+          return;
+        }
+        
+        // Detectar si es una carpeta de Google Drive
+        var esCarpeta = urlFotos.includes('/folders/');
+        
+        // Obtener el contenedor del carrusel
+        var carouselInner = document.getElementById('carouselInner');
+        var contadorFotos = document.getElementById('contadorFotos');
+        
+        // Limpiar el carrusel
+        carouselInner.innerHTML = '';
+        
+        if (esCarpeta) {
+          // CASO 1: Es una carpeta de Google Drive - Mostrar iframe
+          console.log('Carpeta de Google Drive detectada');
+          
+          // Extraer el ID de la carpeta
+          var matchFolder = urlFotos.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+          if (matchFolder && matchFolder[1]) {
+            var folderId = matchFolder[1];
+            
+            // Crear URL para vista embebida de carpeta
+            var urlEmbebida = 'https://drive.google.com/embeddedfolderview?id=' + folderId + '#grid';
+            
+            // Crear un item del carrusel con iframe
+            var item = document.createElement('div');
+            item.className = 'carousel-item active';
+            
+            var iframe = document.createElement('iframe');
+            iframe.src = urlEmbebida;
+            iframe.style.width = '100%';
+            iframe.style.height = '70vh';
+            iframe.style.border = 'none';
+            iframe.allow = 'autoplay';
+            
+            item.appendChild(iframe);
+            carouselInner.appendChild(item);
+            
+            // Ocultar controles del carrusel
+            var controles = document.querySelectorAll('#carouselFotos .carousel-control-prev, #carouselFotos .carousel-control-next');
+            controles.forEach(function(control) {
+              control.style.display = 'none';
+            });
+            
+            // Actualizar contador
+            contadorFotos.innerHTML = '<i class="bi bi-folder2-open"></i> Carpeta de fotografías';
+          }
+        } else {
+          // CASO 2: URLs individuales - Mostrar carrusel
+          console.log('URLs individuales detectadas');
+          
+          // Separar las URLs por punto y coma o coma
+          var urls = urlFotos.split(/[;,]/).map(function(url) { return url.trim(); }).filter(function(url) { return url !== ''; });
+          
+          console.log('URLs procesadas:', urls);
+          
+          // Función para convertir URLs de Google Drive
+          function convertirUrlGoogleDrive(url) {
+            if (url.includes('drive.google.com')) {
+              // Si es un enlace de archivo individual
+              var matchFile = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+              if (matchFile && matchFile[1]) {
+                return 'https://drive.google.com/uc?export=view&id=' + matchFile[1];
+              }
+            }
+            return url;
+          }
+          
+          // Crear los items del carrusel
+          urls.forEach(function(url, index) {
+            var urlProcesada = convertirUrlGoogleDrive(url);
+            
+            if (urlProcesada) {
+              var item = document.createElement('div');
+              item.className = 'carousel-item' + (index === 0 ? ' active' : '');
+              
+              var img = document.createElement('img');
+              img.src = urlProcesada;
+              img.className = 'd-block w-100';
+              img.alt = 'Fotografía ' + (index + 1);
+              img.style.maxHeight = '70vh';
+              img.style.objectFit = 'contain';
+              img.style.backgroundColor = '#000';
+              
+              // Manejar error de carga
+              img.onerror = function() {
+                console.error('Error cargando imagen:', urlProcesada);
+                this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23ddd" width="800" height="600"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="24" dy="10.5" font-weight="bold" x="50%25" y="50%25" text-anchor="middle"%3EError al cargar imagen%3C/text%3E%3C/svg%3E';
+              };
+              
+              item.appendChild(img);
+              carouselInner.appendChild(item);
+            }
+          });
+          
+          // Actualizar contador
+          contadorFotos.textContent = urls.length > 1 ? urls.length + ' fotografías' : '1 fotografía';
+          
+          // Mostrar/ocultar controles del carrusel según la cantidad de imágenes
+          var controles = document.querySelectorAll('#carouselFotos .carousel-control-prev, #carouselFotos .carousel-control-next');
+          controles.forEach(function(control) {
+            control.style.display = urls.length > 1 ? 'flex' : 'none';
+          });
+        }
+        
+        // Mostrar el modal
+        var fotoModal = new bootstrap.Modal(document.getElementById('fotoModal'));
+        fotoModal.show();
+      };
     </script>
   </body>
 </html>

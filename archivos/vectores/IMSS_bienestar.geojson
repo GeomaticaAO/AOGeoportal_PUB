@@ -1,0 +1,27 @@
+{
+"type": "FeatureCollection",
+"name": "IMSS_bienestar",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "descriptio": "15", "Nombre de": "T-III Dr. Manuel Escontría ", "Direccion": "Frontera 15 s/n col. San Ángel. 01000" }, "geometry": { "type": "Point", "coordinates": [ -99.1932874, 19.3425222, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "12", "Nombre de": "T-III Dr. Lomas La Era", "Direccion": "Cerrada Trebol y Nogales s/n Col. Lomas de la Era" }, "geometry": { "type": "Point", "coordinates": [ -99.258839, 19.3261267, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "4", "Nombre de": "T-I Ave Real", "Direccion": "Zacua esq. Albatros s/n, Col. Ave Real. 01560" }, "geometry": { "type": "Point", "coordinates": [ -99.2385157, 19.3618118, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "7", "Nombre de": "T-I Herón Proal", "Direccion": "Av. Centenario 1225, Col. Herón Proal 01640" }, "geometry": { "type": "Point", "coordinates": [ -99.2313569, 19.3594916, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "17", "Nombre de": "T-I Puente Colorado", "Direccion": "Puente Nacional Tetlac 100, Col. Puente Colorado. 01730" }, "geometry": { "type": "Point", "coordinates": [ -99.2297527, 19.3491626, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "11", "Nombre de": "Centro de Salud Tarango", "Direccion": "Entre Andador 5 y 6, C. Tarango, 3er Parque las Águilas, 01710 Ciudad de México, CDMX" }, "geometry": { "type": "Point", "coordinates": [ -99.2190924, 19.3531932, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "20", "Nombre de": "T-I Tetelpan", "Direccion": "Calz. Desierto de los Leones 5020, Col. La Herradura del Pueblo de Tetelpan." }, "geometry": { "type": "Point", "coordinates": [ -99.2306335, 19.341513, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "16", "Nombre de": "T-III Dr. Ignacio Morones Prieto", "Direccion": "Plaza Hidalgo atrás de la Subdelegación s/n, Col. San Bartolo Ameyalco. 01800" }, "geometry": { "type": "Point", "coordinates": [ -99.2724791, 19.3291101, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "18", "Nombre de": "T-III Dr. Eduardo Jenner ", "Direccion": "Privada Matamoros 21-23 s/n, Pueblo Santa Fe." }, "geometry": { "type": "Point", "coordinates": [ -99.2428102, 19.3818331, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "8", "Nombre de": "T-III Dr. Manuel Márquez Escobedo", "Direccion": "Joaquín Pardavé 10, Col. Hogar y Redención. 01450" }, "geometry": { "type": "Point", "coordinates": [ -99.2130386, 19.3708862, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "6", "Nombre de": "T-I Garcimarrero", "Direccion": "Encino equina Avenida Santa Lucia s/n, Col. Garcimarrero." }, "geometry": { "type": "Point", "coordinates": [ -99.2363571, 19.3676858, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "13", "Nombre de": "T-III Minas de Cristo ", "Direccion": "Prolongación Rio Becerra s/n, Col. Minas Cristo Rey. 01419" }, "geometry": { "type": "Point", "coordinates": [ -99.2005135, 19.3814259, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "3", "Nombre de": "T-III Ampliación Presidentes ", "Direccion": "John F. Kennedy y presidente Jefferson s/n, Col. Ampliación Presidentes. 01299" }, "geometry": { "type": "Point", "coordinates": [ -99.2250258, 19.3754664, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "10", "Nombre de": "T-II La Cascada", "Direccion": "Risa Trepadora esq. Piedra Guija entre Peridoto y Piedra Azul s/n, Col. La Cascada 01490" }, "geometry": { "type": "Point", "coordinates": [ -99.1998737, 19.369319, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "9", "Nombre de": "T-III Jalalpa el Grande", "Direccion": "Av. Jalalpa Sur esq. con Poniente Fortín s/n, Col. Ampliación Jalapa. 01296" }, "geometry": { "type": "Point", "coordinates": [ -99.2385821, 19.3719422, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "14", "Nombre de": "T-II El Piru", "Direccion": "Cedros entre Marco Polo y Roble s/n, Col. Desarrollo Urbano El Piru" }, "geometry": { "type": "Point", "coordinates": [ -99.2175069, 19.3815463, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "1", "Nombre de": "T-II La Conchita", "Direccion": "1 de noviembre, (Dentro del Deportivo la Conchita) s/n, Col. La Conchita. 01109" }, "geometry": { "type": "Point", "coordinates": [ -99.2064838, 19.3928748, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "19", "Nombre de": "T-II Santa Rosa Xochiac", "Direccion": "Calzada Desierto de los Leones 7615, Col. Pueblo de Santa Rosa Xochiac" }, "geometry": { "type": "Point", "coordinates": [ -99.2803714, 19.3288958, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "5", "Nombre de": "T-I Corpus Cristy", "Direccion": "Av. Tamaulipas y esq. Alto Lerma s/n, Col. Corpus Christi. 01530" }, "geometry": { "type": "Point", "coordinates": [ -99.247638284187559, 19.36326030650034, 0.0 ] } },
+{ "type": "Feature", "properties": { "descriptio": "21", "Nombre de": "Hospital General Enrique Cabrera", "Direccion": "Av Centenario 3170, Mina los Coyotes, Álvaro Obregón, 01618 Ciudad de México, CDMX" }, "geometry": { "type": "Point", "coordinates": [ -99.224572535919748, 19.361725043150649, 0.0 ] } }
+]
+}

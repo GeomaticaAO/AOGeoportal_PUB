@@ -4,6 +4,24 @@
         return;
     }
 
+    // Función auxiliar para formatear actividades como lista HTML
+    function formatearActividadesLista(actividades) {
+        if (!actividades || actividades.trim() === '') return '';
+        const actividadesArray = actividades.split('\n').map(a => a.trim()).filter(a => a);
+        if (actividadesArray.length === 0) return '';
+        const items = actividadesArray.map(act => `<li>${act}</li>`).join('');
+        return `<ul style="margin: 5px 0; padding-left: 20px;">${items}</ul>`;
+    }
+
+    // Función auxiliar para crear enlace de foto seguro
+    function crearEnlaceFoto(url) {
+        if (!url) return '';
+        // Escapar caracteres especiales para HTML y JavaScript
+        const urlLimpia = url.replace(/^"+|"+$/g, "").trim();
+        const urlEscapada = urlLimpia.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        return `<b>Foto:</b> <a href="#" onclick="window.abrirFotoModal('${urlEscapada}'); return false;" style="cursor: pointer;">Ver imagen</a><br>`;
+    }
+
     if (!map.getPane('capasPuntosPane')) {
         map.createPane('capasPuntosPane');
         map.getPane('capasPuntosPane').style.zIndex = 650;
@@ -183,10 +201,10 @@ fetch(urlCSV)
                             popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
                         }
                         if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
-                        if (actGratis) popup += `<b>Actividades Gratuitas:</b> ${actGratis}<br>`;
-                        if (actCosto) popup += `<b>Actividades con Costo:</b> ${actCosto}<br>`;
+                        if (actGratis) popup += `<b>Actividades Gratuitas:</b>${formatearActividadesLista(actGratis)}`;
+                        if (actCosto) popup += `<b>Actividades con Costo:</b>${formatearActividadesLista(actCosto)}`;
                         if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
-                        if (linkFoto) popup += `<b>Foto:</b> <a href="${linkFoto}" target="_blank">Ver imagen</a><br>`;
+                        if (linkFoto) popup += crearEnlaceFoto(linkFoto);
 
                         const marker = L.marker([lat, lng], {
                             icon: icono,
@@ -329,13 +347,13 @@ fetch(urlCSVModulos)
               popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
             }
             if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
-            if (actGratis) popup += `<b>Actividades Gratuitas:</b> ${actGratis}<br>`;
-            if (actCosto) popup += `<b>Actividades con Costo:</b> ${actCosto}<br>`;
+            if (actGratis) popup += `<b>Actividades Gratuitas:</b>${formatearActividadesLista(actGratis)}`;
+            if (actCosto) popup += `<b>Actividades con Costo:</b>${formatearActividadesLista(actCosto)}`;
             if (talleres) popup += `<b>Talleres Eventuales:</b> ${talleres}<br>`;
             if (horarios) popup += `<b>Días y Horarios:</b> ${horarios}<br>`;
             if (edades) popup += `<b>Edades:</b> ${edades}<br>`;
             if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
-            if (linkFoto) popup += `<b>Foto:</b> <a href="${linkFoto}" target="_blank">Ver imagen</a><br>`;
+            if (linkFoto) popup += crearEnlaceFoto(linkFoto);
 
             const marker = L.marker([lat, lng], {
               icon: icono,
@@ -570,13 +588,10 @@ fetch(urlCSVCACI)
               popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
             }
             if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
-            if (actGratis) popup += `<b>Actividades Gratuitas:</b> ${actGratis}<br>`;
-            if (actCosto) popup += `<b>Actividades con Costo:</b> ${actCosto}<br>`;
+            if (actGratis) popup += `<b>Actividades Gratuitas:</b>${formatearActividadesLista(actGratis)}`;
+            if (actCosto) popup += `<b>Actividades con Costo:</b>${formatearActividadesLista(actCosto)}`;
             if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
-            if (linkFoto) {
-              const urlFoto = linkFoto.replace(/^"+|"+$/g, "").trim();
-              popup += `<b>Foto:</b> <a href="${urlFoto}" target="_blank">Ver imagen</a><br>`;
-            }
+            if (linkFoto) popup += crearEnlaceFoto(linkFoto);
 
             const marker = L.marker([lat, lng], {
               icon: icono,
@@ -711,12 +726,11 @@ fetch(urlCSVCC)
               popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
             }
             if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
-            if (actGratis) popup += `<b>Actividades Gratuitas:</b> ${actGratis}<br>`;
-            if (actCosto) popup += `<b>Actividades con Costo:</b> ${actCosto}<br>`;
+            if (actGratis) popup += `<b>Actividades Gratuitas:</b>${formatearActividadesLista(actGratis)}`;
+            if (actCosto) popup += `<b>Actividades con Costo:</b>${formatearActividadesLista(actCosto)}`;
             if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
             if (linkFoto) {
-            const enlaceFoto = linkFoto.replace(/^"+|"+$/g, "").trim();
-            popup += `<b>Foto:</b> <a href="${enlaceFoto}" target="_blank" rel="noopener noreferrer">Ver imagen</a><br>`;
+            popup += crearEnlaceFoto(linkFoto);
             } else {
             popup += `<em>Sin imagen disponible</em><br>`;
             }
@@ -937,12 +951,11 @@ fetch(urlCSV_CI)
               popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
             }
             if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
-            if (actGratis) popup += `<b>Actividades Gratuitas:</b> ${actGratis}<br>`;
-            if (actCosto) popup += `<b>Actividades con Costo:</b> ${actCosto}<br>`;
+            if (actGratis) popup += `<b>Actividades Gratuitas:</b>${formatearActividadesLista(actGratis)}`;
+            if (actCosto) popup += `<b>Actividades con Costo:</b>${formatearActividadesLista(actCosto)}`;
             if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
             if (linkFoto) {
-            const enlaceFoto = linkFoto.replace(/^"+|"+$/g, "").trim();
-             popup += `<b>Foto:</b> <a href="${enlaceFoto}" target="_blank" rel="noopener noreferrer">Ver imagen</a><br>`;
+            popup += crearEnlaceFoto(linkFoto);
             } else {
              popup += `<em>Sin imagen disponible</em><br>`;
             }
@@ -1082,12 +1095,11 @@ fetch(urlCSV_CAM)
               popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
             }
             if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
-            if (actGratis) popup += `<b>Actividades Gratuitas:</b> ${actGratis}<br>`;
-            if (actCosto) popup += `<b>Actividades con Costo:</b> ${actCosto}<br>`;
+            if (actGratis) popup += `<b>Actividades Gratuitas:</b>${formatearActividadesLista(actGratis)}`;
+            if (actCosto) popup += `<b>Actividades con Costo:</b>${formatearActividadesLista(actCosto)}`;
             if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
             if (linkFoto) {
-            const enlaceFoto = linkFoto.replace(/^"+|"+$/g, "").trim();
-            popup += `<b>Foto:</b> <a href="${enlaceFoto}" target="_blank" rel="noopener noreferrer">Ver imagen</a><br>`;
+            popup += crearEnlaceFoto(linkFoto);
             } else {
             popup += `<em>Sin imagen disponible</em><br>`;
             }
@@ -1226,12 +1238,11 @@ fetch(urlCSV_CAO)
               popup += `<b>Ubicación:</b> <a href="${urlSegura}" target="_blank">Abrir en Google Maps</a><br>`;
             }
             if (contacto) popup += `<b>Contacto:</b> ${contacto}<br>`;
-            if (actGratis) popup += `<b>Actividades Gratuitas:</b> ${actGratis}<br>`;
-            if (actCosto) popup += `<b>Actividades con Costo:</b> ${actCosto}<br>`;
+            if (actGratis) popup += `<b>Actividades Gratuitas:</b>${formatearActividadesLista(actGratis)}`;
+            if (actCosto) popup += `<b>Actividades con Costo:</b>${formatearActividadesLista(actCosto)}`;
             if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
             if (linkFoto) {
-             const enlaceFoto = linkFoto.replace(/^"+|"+$/g, "").trim();
-                 popup += `<b>Foto:</b> <a href="${enlaceFoto}" target="_blank" rel="noopener noreferrer">Ver imagen</a><br>`;
+            popup += crearEnlaceFoto(linkFoto);
                     } else {
                  popup += `<em>Sin imagen disponible</em><br>`;
                     }
@@ -1392,7 +1403,7 @@ fetch(urlCSVSalud)
             if (servicios) popup += `<b>Servicios:</b> ${servicios}<br>`;
             if (horarios) popup += `<b>Horarios:</b> ${horarios}<br>`;
             if (observaciones) popup += `<b>Observaciones:</b> ${observaciones}<br>`;
-            if (linkFoto) popup += `<b>Foto:</b> <a href="${linkFoto}" target="_blank">Ver imagen</a><br>`;
+            if (linkFoto) popup += crearEnlaceFoto(linkFoto);
 
             const marker = L.marker([lat, lng], {
               icon: icono,

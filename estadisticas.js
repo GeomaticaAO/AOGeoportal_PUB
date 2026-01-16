@@ -1,10 +1,47 @@
-function verEstadisticas(nombreColonia) {
-    console.log("Iniciando verEstadisticas para:", nombreColonia);
+function verEstadisticas(nombreColonia, claveUT) {
+    console.log("Iniciando verEstadisticas para:", nombreColonia, "con CLAVE UT:", claveUT);
     
     // Función para formatear números con comas
     function formatearNumero(numero) {
         if (numero === null || numero === undefined || numero === 'N/D') return 'N/D';
         return Number(numero).toLocaleString('es-MX');
+    }
+    
+    // Cargar COPACOS en la pestaña correspondiente
+    function cargarCOPACOS(claveUT) {
+        const copacosInfo = document.getElementById("copacosInfo");
+        if (!copacosInfo) {
+            console.error("No se encontró el contenedor de COPACOS");
+            return;
+        }
+        
+        if (!claveUT || !window.copacoPorClaveUT || !window.copacoPorClaveUT[claveUT]) {
+            copacosInfo.innerHTML = `
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle"></i> No hay COPACOS registrados para esta colonia.
+                </div>`;
+            return;
+        }
+        
+        const listaCopacos = window.copacoPorClaveUT[claveUT];
+        copacosInfo.innerHTML = `
+            <h5 style="margin-bottom: 15px; color: #922B21;">
+                <i class="bi bi-people-fill"></i> COPACOS de ${nombreColonia}
+            </h5>
+            <p class="text-muted">Los Comités de Participación Comunitaria (COPACOS) son organizaciones ciudadanas que representan a los habitantes de cada colonia.</p>
+            <div class="list-group" style="margin-top: 20px;">
+                ${listaCopacos.map((nombre, index) => `
+                    <div class="list-group-item" style="border-left: 4px solid #922B21; margin-bottom: 10px;">
+                        <h6 class="mb-1">
+                            <i class="bi bi-person-badge"></i> COPACO ${index + 1}
+                        </h6>
+                        <p class="mb-0" style="font-size: 14px;">${nombre}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="alert alert-secondary mt-3" role="alert" style="font-size: 13px;">
+                <strong>Total de COPACOS:</strong> ${listaCopacos.length}
+            </div>`;
     }
     
     fetch("archivos/vectores/colonias_wgs84_geojson_renombrado.geojson")
@@ -278,6 +315,16 @@ function verEstadisticas(nombreColonia) {
 
                 console.log("Mostrando modal de estadísticas");
                 const modal = new bootstrap.Modal(modalElement);
+                
+                // Cargar COPACOS en la pestaña correspondiente
+                cargarCOPACOS(claveUT);
+                
+                // Asegurar que la pestaña de estadísticas esté activa
+                const datosTab = document.getElementById('datos-tab');
+                if (datosTab) {
+                    datosTab.click();
+                }
+                
                 modal.show();
             })
             .catch(error => {

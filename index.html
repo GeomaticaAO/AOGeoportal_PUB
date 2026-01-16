@@ -48,6 +48,25 @@
       #consultaMapasBtn:hover {
         background-color: #7a1f1a;
       }
+      
+      /* Estilos para las pestañas del modal de estadísticas */
+      #estadisticasTabs .nav-link {
+        color: #000 !important;
+        font-weight: 500;
+        border: 1px solid #dee2e6;
+      }
+      
+      #estadisticasTabs .nav-link:hover {
+        color: #000 !important;
+        background-color: #f8f9fa;
+      }
+      
+      #estadisticasTabs .nav-link.active {
+        color: #000 !important;
+        font-weight: 600;
+        background-color: #fff !important;
+        border-bottom-color: #fff !important;
+      }
     </style>
   </head>
 
@@ -68,9 +87,30 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div id="estadisticasInfo"></div>
-            <div style="margin-top: 15px;">
-              <canvas id="piramidePoblacional" style="max-height: 300px;"></canvas>
+            <!-- Pestañas de navegación -->
+            <ul class="nav nav-tabs" id="estadisticasTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="datos-tab" data-bs-toggle="tab" data-bs-target="#datos" type="button" role="tab" aria-controls="datos" aria-selected="true">Estadísticas</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="copacos-tab" data-bs-toggle="tab" data-bs-target="#copacos" type="button" role="tab" aria-controls="copacos" aria-selected="false">Conoce a tus COPACOS</button>
+              </li>
+            </ul>
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content" id="estadisticasTabContent" style="margin-top: 15px;">
+              <!-- Pestaña de Estadísticas -->
+              <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="datos-tab">
+                <div id="estadisticasInfo"></div>
+                <div style="margin-top: 15px;">
+                  <canvas id="piramidePoblacional" style="max-height: 300px;"></canvas>
+                </div>
+              </div>
+              <!-- Pestaña de COPACOS -->
+              <div class="tab-pane fade" id="copacos" role="tabpanel" aria-labelledby="copacos-tab">
+                <div id="copacosInfo" style="padding: 10px;">
+                  <p class="text-muted">Cargando información de COPACOS...</p>
+                </div>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -162,6 +202,20 @@
                 Unidades Habitacionales
               </label>
             </div>
+            <!-- Checkbox para la capa de Casas Obregonenses -->
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="toggleCasasOCheckbox" disabled>
+              <label class="form-check-label" for="toggleCasasOCheckbox">
+                Casas Obregonenses
+              </label>
+            </div>
+            <!-- Checkbox para la capa de Clúster Universitario -->
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="toggleClusterCheckbox" disabled>
+              <label class="form-check-label" for="toggleClusterCheckbox">
+                Clúster Universitario
+              </label>
+            </div>
           </div>
           <!-- Botón ubicado en la parte inferior de la barra lateral -->
           <div class="sidebar-footer">
@@ -208,6 +262,10 @@
     <script src="Capa_pol.js?v=3"></script>
     <!-- Script para incorporar capa de Unidades Habitacionales -->
     <script src="Capa_u_habitacionales.js?v=1"></script>
+    <!-- Script para incorporar capa de Casas Obregonenses -->
+    <script src="Capa_casas_o.js?v=1"></script>
+    <!-- Script para incorporar capa de Clúster Universitario -->
+    <script src="Capa_cluster.js?v=1"></script>
     <!-- Script que maneja la lógica del buscador de colonias -->
     <script src="buscador.js?v=7"></script>
     <!-- Script donde se definen las capas temáticas, info a mostrar e íconos -->
@@ -298,7 +356,44 @@
             }
           });
         } else {
-          console.error("No se encontró el checkbox para encender/apagar la capa IDS_AO.");
+          console.error("No se encontró el checkbox para encender/apagar la capa de Unidades Habitacionales.");
+        }
+
+        // Control para la capa de Casas Obregonenses
+        var toggleCasasOCheckbox = document.getElementById("toggleCasasOCheckbox");
+        if (toggleCasasOCheckbox) {
+          toggleCasasOCheckbox.addEventListener("change", function() {
+            if (this.checked) {
+              if (window.Casas_O_layer) {
+                window.Casas_O_layer.addTo(map);
+                window.Casas_O_layer.eachLayer(layer => layer.bringToBack());
+              }
+            } else {
+              if (window.Casas_O_layer) {
+                map.removeLayer(window.Casas_O_layer);
+              }
+            }
+          });
+        } else {
+          console.error("No se encontró el checkbox para encender/apagar la capa de Casas Obregonenses.");
+        }
+
+        // Control para la capa de Clúster Universitario
+        var toggleClusterCheckbox = document.getElementById("toggleClusterCheckbox");
+        if (toggleClusterCheckbox) {
+          toggleClusterCheckbox.addEventListener("change", function() {
+            if (this.checked) {
+              if (window.Cluster_layer) {
+                window.Cluster_layer.addTo(map);
+              }
+            } else {
+              if (window.Cluster_layer) {
+                map.removeLayer(window.Cluster_layer);
+              }
+            }
+          });
+        } else {
+          console.error("No se encontró el checkbox para encender/apagar la capa de Clúster Universitario.");
         }
 
         // Agregar evento al botón "Consulta otros mapas"

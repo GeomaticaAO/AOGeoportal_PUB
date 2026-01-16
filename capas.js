@@ -1738,6 +1738,170 @@ fetch("archivos/vectores/hospitales.geojson")
   .catch(error => console.error("Error al cargar Hospitales:", error));
 
 // ============================================================================
+// 🚒 CAPA: BOMBEROS
+// ============================================================================
+fetch("archivos/vectores/bomberos.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoBombero = L.divIcon({
+      html: '<div style="font-size: 28px; line-height: 1;">🚒</div>',
+      className: 'emoji-icon',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -14]
+    });
+
+    const grupoBomberos = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.Name || props.NOMBRE || 'Estación de Bomberos'}</b><br>`;
+      
+      // Mostrar todos los atributos disponibles excepto Name y fid
+      if (props) {
+        for (let key in props) {
+          if (key !== 'Name' && key !== 'NOMBRE' && key !== 'fid' && props[key]) {
+            popup += `<b>${key}:</b> ${props[key]}<br>`;
+          }
+        }
+      }
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoBombero,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoBomberos.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.Name || props.NOMBRE || 'Estación de Bomberos',
+          capa: "Bomberos",
+          marker: marker,
+          checkboxId: "checkboxBomberos"
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxBomberos";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoBomberos.addTo(map);
+      } else {
+        map.removeLayer(grupoBomberos);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxBomberos";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🚒</span>
+      Bomberos
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar Bomberos:", error));
+
+// ============================================================================
+// 🏥 CAPA: IMSS BIENESTAR
+// ============================================================================
+fetch("archivos/vectores/IMSS_bienestar.geojson")
+  .then(response => response.json())
+  .then(data => {
+    const iconoIMSS = L.icon({
+      iconUrl: 'img/icono/imss_bienestar.png',
+      iconSize: [24, 32],
+      iconAnchor: [12, 16],
+      popupAnchor: [0, -16]
+    });
+
+    const grupoIMSS = L.layerGroup([], { pane: 'capasPuntosPane' });
+
+    data.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let popup = `<b>${props.Name || props.NOMBRE || 'IMSS Bienestar'}</b><br>`;
+      
+      // Mostrar atributos específicos
+      if (props['Nombre de']) {
+        popup += `<b>Nombre:</b> ${props['Nombre de']}<br>`;
+      }
+      if (props['Direccion']) {
+        popup += `<b>Dirección:</b> ${props['Direccion']}<br>`;
+      }
+
+      const marker = L.marker([coords[1], coords[0]], {
+        icon: iconoIMSS,
+        pane: 'capasPuntosPane'
+      }).bindPopup(popup);
+
+      grupoIMSS.addLayer(marker);
+
+      if (typeof registrarElementoBuscable === "function") {
+        registrarElementoBuscable({
+          nombre: props.Name || props.NOMBRE || 'IMSS Bienestar',
+          capa: "IMSS Bienestar",
+          marker: marker,
+          checkboxId: "checkboxIMSS"
+        });
+      }
+    });
+
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxIMSS";
+
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoIMSS.addTo(map);
+      } else {
+        map.removeLayer(grupoIMSS);
+      }
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxIMSS";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <img src="img/icono/imss_bienestar.png" style="width: 14px; height: 18px; margin-left: 5px; margin-right: 8px; vertical-align: middle;">
+      IMSS Bienestar
+    `;
+
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaCapasEquipamientos.appendChild(itemCapa);
+    checkboxesEquipamientos.push(checkbox);
+  })
+  .catch(error => console.error("Error al cargar IMSS Bienestar:", error));
+
+// ============================================================================
 // 🛒 CAPA: MERCADOS
 // ============================================================================
 fetch("archivos/vectores/mercados.geojson")
@@ -1757,7 +1921,7 @@ fetch("archivos/vectores/mercados.geojson")
       const props = feature.properties;
       const coords = feature.geometry.coordinates;
 
-      let popup = `<b>${props.Name || 'Mercado'}</b><br>`;
+      let popup = `<b>${props.MERCADOS || 'Mercado'}</b><br>`;
       if (props.descriptio) popup += `${props.descriptio}<br>`;
 
       const marker = L.marker([coords[1], coords[0]], {
@@ -1769,7 +1933,7 @@ fetch("archivos/vectores/mercados.geojson")
 
       if (typeof registrarElementoBuscable === "function") {
         registrarElementoBuscable({
-          nombre: props.Name || 'Mercado',
+          nombre: props.MERCADOS || 'Mercado',
           capa: "Mercados",
           marker: marker,
           checkboxId: "checkboxMercados"

@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   let copacoPorClaveUT = {}; // Diccionario para COPACO por CLAVE UT
+  window.copacoPorClaveUT = copacoPorClaveUT; // Hacer global para estadisticas.js
 
   // Cargar CSV con nombres de COPACO
   fetch("archivos/tablas/copaco_por_claveut.csv")
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
               copacoPorClaveUT[clave].push(nombre);
             }
           });
+          window.copacoPorClaveUT = copacoPorClaveUT; // Actualizar global
           cargarGeojsonColonias(); // Solo después de tener COPACO
         }
       });
@@ -54,27 +56,20 @@ document.addEventListener("DOMContentLoaded", function () {
             if (nombreColonia) {
               let popupContent = `
                 <div class="popup-contenido">
-                  <h4 class="popup-titulo">${nombreColonia}</h4>`;
-
-              if (claveUT && copacoPorClaveUT[claveUT]) {
-                popupContent += `
-                  <div class="popup-copaco">
-                    <b>COPACOS:</b>
-                    <ul>
-                      ${copacoPorClaveUT[claveUT].map(nombre => `<li>${nombre}</li>`).join("")}
-                    </ul>
-                  </div>`;
-              }
-
-              popupContent += `
+                  <h4 class="popup-titulo">${nombreColonia}</h4>
                   <div class="estadisticasBoton">
-                    <button class="VerEstadisticas btn btn-danger" onclick="verEstadisticas('${nombreColonia}')">
+                    <button class="VerEstadisticas btn btn-danger" onclick="verEstadisticas('${nombreColonia}', '${claveUT}')">
                       Ver Estadísticas
                     </button>
                   </div>
                 </div>`;
 
               layer.bindPopup(popupContent);
+              
+              // Guardar los COPACOS en el layer para acceso posterior
+              if (claveUT && copacoPorClaveUT[claveUT]) {
+                layer.copacos = copacoPorClaveUT[claveUT];
+              }
 
               // Crear tooltip con el nombre de la colonia
               const tooltip = L.tooltip({
